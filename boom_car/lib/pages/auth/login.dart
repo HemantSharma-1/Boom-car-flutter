@@ -1,3 +1,4 @@
+import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 100.0),
+        padding: const EdgeInsets.only(top: 80.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,83 +22,114 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.only(left: 28.0),
               child: Text(
                 "Welcome Back!",
-                style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 25),
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
             Center(
               child: Image.asset('assets/images/img_login.png'),
             ),
             Container(
-              padding: EdgeInsets.all(20),
-              constraints: const BoxConstraints(maxHeight: 400),
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              constraints: const BoxConstraints(maxHeight: 425),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 28, 28, 28),
+                color: bottomSheetColor,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(50),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        const Color.fromARGB(78, 249, 217, 120), // Shadow color
+                    color: shadowColor, // Shadow color
                     blurRadius: 50, // How soft the shadow should be
                     blurStyle: BlurStyle.normal,
                     spreadRadius: 10,
                     offset: const Offset(
-                        0, -10), // Negative offset moves shadow upwards
+                        0, -8), // Negative offset moves shadow upwards
                   ),
                 ],
               ),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      height: 20,
+                    ),
                     Text(
                       "Log In",
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 35),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       "Fill out your details to unlock your ride",
-                      style: TextStyle(color: Colors.white38),
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    SizedBox(
+                      height: 25,
                     ),
                     TextField(),
-                    TextField(),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('Forgot Password?'),
+                    SizedBox(
+                      height: 15,
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text("Log in")),
+                    TextField(),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Divider(
-                          color: Colors.white,
-                          thickness: 2,
-                          height: 10,
-                        ),
                         Text(
-                          'Or',
-                          style: TextStyle(color: Colors.white),
+                          'Forgot Password?',
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                        Divider(
-                          color: Colors.white,
-                          thickness: 2,
-                          height: 10,
-                        )
                       ],
                     ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("Log in with Google"),
+                    SizedBox(
+                      height: 10,
                     ),
-                    Text("i don't have any account Sign Up")
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text("Log In"),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Or',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/icons/ic_google.png'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("Log in with Google"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Center(child: Text("i don't have any account Sign Up"))
                   ],
                 ),
               ),
