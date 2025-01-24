@@ -88,9 +88,7 @@ class MyApp extends StatelessWidget {
               fontSize: 12),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          constraints: BoxConstraints(
-            maxHeight: 42,
-          ),
+          //constraints: BoxConstraints(maxHeight: 42, minHeight: 35),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
@@ -106,6 +104,8 @@ class MyApp extends StatelessWidget {
           filled: true,
           fillColor: Colors.black,
         ),
+        bottomSheetTheme:
+            BottomSheetThemeData(backgroundColor: Colors.transparent),
         useMaterial3: true,
       ),
       home: const AuthWrapper(),
