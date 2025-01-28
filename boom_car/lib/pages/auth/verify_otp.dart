@@ -1,16 +1,15 @@
-import 'package:boom_car/pages/auth/verify_otp.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
 
-class PhoneNumberScreen extends StatefulWidget {
-  const PhoneNumberScreen({super.key});
+class VerifyOtp extends StatefulWidget {
+  const VerifyOtp({super.key});
 
   @override
-  State<PhoneNumberScreen> createState() => _PhoneNumberScreenState();
+  State<VerifyOtp> createState() => _VerifyOtpState();
 }
 
-class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
-  final TextEditingController phoneCtrl = TextEditingController();
+class _VerifyOtpState extends State<VerifyOtp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +17,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         builder: (context, constraints) {
           final screenHeight = constraints.maxHeight;
           final isSmallScreen = screenHeight < 600;
+          print(screenHeight);
           return SafeArea(
             bottom: false,
             child: Column(
@@ -29,13 +29,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 isSmallScreen
                     ? Center(
                         child: Image.asset(
-                          'assets/images/img_phone.png',
+                          'assets/images/img_otp.png',
                           height: 230,
                         ),
                       )
                     : Center(
                         child: Image.asset(
-                          'assets/images/img_phone.png',
+                          'assets/images/img_otp.png',
                         ),
                       ),
               ],
@@ -71,7 +71,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 children: [
                   Spacer(),
                   Text(
-                    "Enter Contact No.",
+                    "Verify with OTP",
                     style: isSmallScreen
                         ? Theme.of(context)
                             .textTheme
@@ -80,32 +80,29 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                         : Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
-                    "Enter Mobile Number to Verify",
+                    "Enter the code below",
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   Spacer(),
-                  TextField(
-                    controller: phoneCtrl,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(0),
-                        constraints: isSmallScreen
-                            ? BoxConstraints(maxHeight: 40)
-                            : BoxConstraints(),
-                        prefixIcon: Image.asset('assets/icons/ic_phone.png'),
-                        hintText: "Phone No."),
+                  Center(
+                    child: Pinput(
+                      defaultPinTheme: PinTheme(
+                        height: 70,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            border: Border.all(color: secondayColor)),
+                      ),
+                    ),
                   ),
                   Spacer(),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VerifyOtp(),
-                          ),
-                        );
-                      },
-                      child: Text("Continue"),
+                      onPressed: () {},
+                      child: Text("Verify"),
                     ),
                   ),
                   Spacer(),
