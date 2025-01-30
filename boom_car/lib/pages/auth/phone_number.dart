@@ -1,9 +1,19 @@
 import 'package:boom_car/pages/auth/verify_otp.dart';
+import 'package:boom_car/services/auth/sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
+import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
-  const PhoneNumberScreen({super.key});
+  const PhoneNumberScreen(
+      {super.key,
+      required this.email,
+      required this.password,
+      required this.userName});
+  final String userName;
+  final String email;
+  final String password;
 
   @override
   State<PhoneNumberScreen> createState() => _PhoneNumberScreenState();
@@ -11,6 +21,27 @@ class PhoneNumberScreen extends StatefulWidget {
 
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   final TextEditingController phoneCtrl = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void signUP() async {
+    if (_formKey.currentState!.validate()) {
+      final response = await UserSignUp().userSignUp(
+          email: widget.email,
+          password: widget.password,
+          name: widget.password,
+          phno: phoneCtrl.text);
+
+      if (response["success"] && mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VerifyOtp(),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,50 +97,50 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               ],
             ),
             child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Spacer(),
-                  Text(
-                    "Enter Contact No.",
-                    style: isSmallScreen
-                        ? Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontSize: 20)
-                        : Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(
-                    "Enter Mobile Number to Verify",
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  Spacer(),
-                  TextField(
-                    controller: phoneCtrl,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(0),
-                        constraints: isSmallScreen
-                            ? BoxConstraints(maxHeight: 40)
-                            : BoxConstraints(),
-                        prefixIcon: Image.asset('assets/icons/ic_phone.png'),
-                        hintText: "Phone No."),
-                  ),
-                  Spacer(),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VerifyOtp(),
-                          ),
-                        );
-                      },
-                      child: Text("Continue"),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Spacer(),
+                    Text(
+                      "Enter Contact No.",
+                      style: isSmallScreen
+                          ? Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontSize: 20)
+                          : Theme.of(context).textTheme.titleLarge,
                     ),
-                  ),
-                  Spacer(),
-                ],
+                    Text(
+                      "Enter Mobile Number to Verify",
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    Spacer(),
+                    TextFormField(
+                      controller: phoneCtrl,
+                      validator: (value) => validator(value),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(numberCharacter),
+                      ],
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
+                          constraints: isSmallScreen
+                              ? BoxConstraints(maxHeight: 40)
+                              : BoxConstraints(),
+                          prefixIcon: Image.asset('assets/icons/ic_phone.png'),
+                          hintText: "Phone No."),
+                    ),
+                    Spacer(),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: signUP,
+                        child: Text("Continue"),
+                      ),
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
             ),
           );

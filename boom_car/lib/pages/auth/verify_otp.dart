@@ -1,3 +1,4 @@
+import 'package:boom_car/pages/home_page.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
@@ -101,7 +102,13 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   Spacer(),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ));
+                      },
                       child: Text("Verify"),
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'package:boom_car/pages/auth/login.dart';
 import 'package:boom_car/pages/auth/phone_number.dart';
 import 'package:boom_car/utils/colors.dart';
+import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,6 +15,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController userNameCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -78,171 +80,185 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
             child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Spacer(),
-                  Text(
-                    "Sign up",
-                    style: isSmallScreen
-                        ? Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontSize: 20)
-                        : Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(
-                    "Fill out your details to unlock your ride",
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  Spacer(),
-                  TextField(
-                    controller: userNameCtrl,
-                    decoration: InputDecoration(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Spacer(),
+                    Text(
+                      "Sign up",
+                      style: isSmallScreen
+                          ? Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontSize: 20)
+                          : Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      "Fill out your details to unlock your ride",
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    Spacer(),
+                    TextFormField(
+                      controller: userNameCtrl,
+                      validator: (value) => validator(value),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
+                          constraints: isSmallScreen
+                              ? BoxConstraints(maxHeight: 40)
+                              : BoxConstraints(),
+                          prefixIcon: Image.asset('assets/icons/ic_user.png'),
+                          hintText: "User Name"),
+                    ),
+                    Spacer(),
+                    isSmallScreen
+                        ? SizedBox(
+                            height: 5,
+                          )
+                        : Container(),
+                    TextFormField(
+                      controller: emailCtrl,
+                      validator: (value) =>
+                          emailValidator(value: value.toString()),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
+                          constraints: isSmallScreen
+                              ? BoxConstraints(maxHeight: 40)
+                              : BoxConstraints(),
+                          prefixIcon: Image.asset('assets/icons/ic_email.png'),
+                          hintText: "Email"),
+                    ),
+                    Spacer(),
+                    isSmallScreen
+                        ? SizedBox(
+                            height: 5,
+                          )
+                        : Container(),
+                    TextFormField(
+                      controller: passwordCtrl,
+                      validator: (value) => passwordValidator(value),
+                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(0),
                         constraints: isSmallScreen
                             ? BoxConstraints(maxHeight: 40)
                             : BoxConstraints(),
-                        prefixIcon: Image.asset('assets/icons/ic_user.png'),
-                        hintText: "User Name"),
-                  ),
-                  Spacer(),
-                  isSmallScreen
-                      ? SizedBox(
-                          height: 5,
-                        )
-                      : Container(),
-                  TextField(
-                    controller: emailCtrl,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(0),
-                        constraints: isSmallScreen
-                            ? BoxConstraints(maxHeight: 40)
-                            : BoxConstraints(),
-                        prefixIcon: Image.asset('assets/icons/ic_email.png'),
-                        hintText: "Email"),
-                  ),
-                  Spacer(),
-                  isSmallScreen
-                      ? SizedBox(
-                          height: 5,
-                        )
-                      : Container(),
-                  TextFormField(
-                    controller: passwordCtrl,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(0),
-                      constraints: isSmallScreen
-                          ? BoxConstraints(maxHeight: 40)
-                          : BoxConstraints(),
-                      suffixIcon: Icon(
-                        Icons.remove_red_eye,
-                        color: secondayColor,
-                      ),
-                      prefixIcon: Image.asset('assets/icons/ic_password.png'),
-                      hintText: "Password",
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Your password must in btw 0-16 characters',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PhoneNumberScreen(),
-                          ),
-                        );
-                      },
-                      child: Text("Sign up"),
-                    ),
-                  ),
-                  Spacer(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white,
-                          thickness: 2,
+                        suffixIcon: Icon(
+                          Icons.remove_red_eye,
+                          color: secondayColor,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          'Or',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white,
-                          thickness: 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Center(
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/icons/ic_google.png'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text("Log in with Google"),
-                        ],
+                        prefixIcon: Image.asset('assets/icons/ic_password.png'),
+                        hintText: "Password",
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("i don't have any account"),
-                        SizedBox(
-                          width: 5,
+                        Text(
+                          'Your password must in btw 0-16 characters',
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                        GestureDetector(
-                          onTap: () {
+                      ],
+                    ),
+                    Spacer(),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginPage(),
+                                builder: (context) => PhoneNumberScreen(
+                                  email: emailCtrl.text,
+                                  password: passwordCtrl.text,
+                                  userName: userNameCtrl.text,
+                                ),
                               ),
                             );
-                          },
-                          child: Text(
-                            "Log In",
-                            style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.fontSize,
-                                color: secondayColor,
-                                fontFamily: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.fontFamily),
+                          }
+                        },
+                        child: Text("Sign up"),
+                      ),
+                    ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
                           ),
-                        )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Or',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  Spacer(),
-                ],
+                    Spacer(),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/icons/ic_google.png'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("Log in with Google"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("i don't have any account"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "Log In",
+                              style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.fontSize,
+                                  color: secondayColor,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.fontFamily),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
             ),
           );

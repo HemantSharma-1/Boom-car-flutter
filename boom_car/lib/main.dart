@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Boom car',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.black,
-        ),
+        brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.black,
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(
@@ -89,6 +87,7 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           //constraints: BoxConstraints(maxHeight: 42, minHeight: 35),
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
@@ -96,6 +95,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
           enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: secondayColor,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
               color: secondayColor,
