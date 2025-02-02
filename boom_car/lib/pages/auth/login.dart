@@ -16,20 +16,35 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String? _errorMessage; // Store error messages
 
   void loginUser() async {
     // Validate returns true if the form is valid, or false otherwise.
-    if (_formKey.currentState!.validate()) {
-      final response = await UserLogin()
-          .userLogin(email: emailCtrl.text, password: passwordCtrl.text);
-      if (response["success"] && mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
+    try {
+      if (_formKey.currentState!.validate()) {
+        setState(() {
+          _errorMessage = null; // Reset previous errors
+        });
+        final response = await UserLogin()
+            .userLogin(email: emailCtrl.text, password: passwordCtrl.text);
+        if (response["success"] && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } else {
+          setState(() {
+            _errorMessage = response["message"] ?? "Login failed. Try again.";
+          });
+        }
       }
+    } catch (e) {
+      setState(() {
+        _errorMessage = "User Not Found";
+      });
+      print(e);
     }
   }
 
@@ -160,6 +175,17 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     Spacer(),
+                    // Show error message if any
+                    if (_errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Center(
+                          child: Text(
+                            _errorMessage!,
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          ),
+                        ),
+                      ),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
