@@ -3,24 +3,25 @@ import 'dart:developer';
 import 'package:boom_car/config/config.dart';
 import 'package:http/http.dart' as http;
 
-class UserSignUp {
-  Future userSignUp({
-    required String email,
-    required String password,
-    required String name,
-    required String phno,
-  }) async {
+class UpdateUser {
+  Future updateUser(
+      {required String email,
+      required String password,
+      required String name,
+      required String auth}) async {
     try {
-      final uri = Uri.parse('$baseUrl/auth/register');
-      final response = await http.post(
+      final uri = Uri.parse('$baseUrl/user');
+      final response = await http.put(
         uri,
         body: jsonEncode({
           "email": email,
           "password": password,
           "name": name,
-          "phone": phno,
         }),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': auth,
+        },
       );
 
       if (response.statusCode == 200) {

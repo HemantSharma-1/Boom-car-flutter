@@ -41,9 +41,10 @@ class _SearchCarsState extends State<SearchCars>
         ),
         actions: [
           Container(
+            margin: EdgeInsets.only(left: 10),
             padding: EdgeInsets.all(6),
             height: 60,
-            width: 330,
+            width: 310,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: secondayColor),
@@ -72,7 +73,7 @@ class _SearchCarsState extends State<SearchCars>
                 ),
                 Spacer(),
                 Container(
-                  width: 106,
+                  width: 120,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -113,63 +114,75 @@ class _SearchCarsState extends State<SearchCars>
           )
         ],
       ),
-      body: Column(
-        children: [
-          Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenHeight = constraints.maxHeight;
+          final isSmallScreen = screenHeight < 600;
+          return Column(
             children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                          constraints: BoxConstraints(maxHeight: 40),
-                          contentPadding: EdgeInsets.all(0),
-                          fillColor: bottomSheetColor,
-                          hintText: "Search for feature,model",
-                          hintStyle: TextStyle(color: Colors.white54),
-                          border: Theme.of(context).inputDecorationTheme.border)
-                      .copyWith(
-                    prefixIcon: Image.asset('assets/icons/ic_search.png'),
-                    suffixIcon: Icon(
-                      Icons.filter_alt_rounded,
-                      color: secondayColor,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                              constraints: BoxConstraints(maxHeight: 40),
+                              contentPadding: EdgeInsets.all(0),
+                              fillColor: bottomSheetColor,
+                              hintText: "Search for feature,model",
+                              hintStyle: TextStyle(color: Colors.white54),
+                              border:
+                                  Theme.of(context).inputDecorationTheme.border)
+                          .copyWith(
+                        prefixIcon: Image.asset('assets/icons/ic_search.png'),
+                        suffixIcon: Icon(
+                          Icons.filter_alt_rounded,
+                          color: secondayColor,
+                        ),
+                      ),
                     ),
                   ),
+                  Icon(Icons.filter_list_sharp),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TabBar.secondary(
+                controller: _tabController,
+                labelColor: secondayColor,
+                indicatorColor: secondayColor,
+                dividerColor: Colors.transparent,
+                unselectedLabelColor: Colors.white,
+                labelStyle: isSmallScreen
+                    ? Theme.of(context)
+                        .textTheme
+                        .displayLarge!
+                        .copyWith(fontSize: 12)
+                    : Theme.of(context)
+                        .textTheme
+                        .displayLarge!
+                        .copyWith(fontSize: 15),
+                tabs: [
+                  Tab(
+                    text: "WITHOUT DRIVER",
+                  ),
+                  Tab(
+                    text: "WITH DRIVER",
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    WithoutDriver(),
+                    WithDriver(),
+                  ],
                 ),
               ),
-              Icon(Icons.filter_list_sharp),
             ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TabBar.secondary(
-            controller: _tabController,
-            labelColor: secondayColor,
-            indicatorColor: secondayColor,
-            dividerColor: Colors.transparent,
-            unselectedLabelColor: Colors.white,
-            labelStyle: Theme.of(context)
-                .textTheme
-                .displayLarge!
-                .copyWith(fontSize: 17),
-            tabs: [
-              Tab(
-                text: "WITHOUT DRIVER",
-              ),
-              Tab(
-                text: "WITH DRIVER",
-              ),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                WithoutDriver(),
-                WithDriver(),
-              ],
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -273,14 +286,16 @@ class Cars extends StatelessWidget {
                       children: [
                         Container(
                           height: 24,
-                          width: 102,
+                          width: 115,
                           padding: EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: secondayColor),
                             color: bottomSheetColor,
                           ),
-                          child: Text('FASTag Available'),
+                          child: Center(
+                            child: Text('FASTag Available'),
+                          ),
                         ),
                         Spacer(),
                         Row(

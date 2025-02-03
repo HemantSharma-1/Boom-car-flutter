@@ -1,6 +1,8 @@
+import 'package:boom_car/pages/auth_wrapper.dart';
 import 'package:boom_car/pages/others/edit_profile.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -94,9 +96,23 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 20,
               ),
-              Text(
-                "Log Out",
-                style: TextStyle(color: secondayColor),
+              GestureDetector(
+                onTap: () async {
+                  // Create storage
+                  final storage = FlutterSecureStorage();
+                  // Delete value
+                  await storage.delete(key: 'authToken');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AuthWrapper(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "Log Out",
+                  style: TextStyle(color: secondayColor),
+                ),
               )
             ],
           ),

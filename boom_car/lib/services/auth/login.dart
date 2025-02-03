@@ -19,7 +19,7 @@ class UserLogin {
         return json;
       } else {
         log("Login failed: ${response.body}");
-        return {"error": "Login failed", "statusCode": response.statusCode};
+        return jsonDecode(response.body);
       }
     } catch (e) {
       log("Exception during login: $e");

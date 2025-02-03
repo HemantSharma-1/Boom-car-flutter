@@ -18,7 +18,6 @@ class _VerifyOtpState extends State<VerifyOtp> {
         builder: (context, constraints) {
           final screenHeight = constraints.maxHeight;
           final isSmallScreen = screenHeight < 600;
-          print(screenHeight);
           return SafeArea(
             bottom: false,
             child: Column(
@@ -103,11 +102,12 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(),
+                          ),
+                        );
                       },
                       child: Text("Verify"),
                     ),

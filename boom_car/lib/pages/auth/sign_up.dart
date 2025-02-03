@@ -18,6 +18,14 @@ class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    userNameCtrl.dispose();
+    passwordCtrl.dispose();
+    emailCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
@@ -178,7 +186,7 @@ class _SignUpState extends State<SignUp> {
                             );
                           }
                         },
-                        child: Text("Sign up"),
+                        child: Text("Continue"),
                       ),
                     ),
                     Spacer(),

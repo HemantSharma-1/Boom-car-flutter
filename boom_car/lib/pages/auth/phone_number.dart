@@ -1,9 +1,11 @@
 import 'package:boom_car/pages/auth/verify_otp.dart';
 import 'package:boom_car/services/auth/sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
+import 'package:boom_car/utils/common_loader.dart';
 import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen(
@@ -22,23 +24,49 @@ class PhoneNumberScreen extends StatefulWidget {
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   final TextEditingController phoneCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String? _errorMessage; // Store error messages
+
+  @override
+  void dispose() {
+    phoneCtrl.dispose();
+    super.dispose();
+  }
 
   void signUP() async {
-    if (_formKey.currentState!.validate()) {
-      final response = await UserSignUp().userSignUp(
-          email: widget.email,
-          password: widget.password,
-          name: widget.password,
-          phno: phoneCtrl.text);
-
-      if (response["success"] && mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VerifyOtp(),
-          ),
-        );
+    try {
+      if (_formKey.currentState!.validate() && mounted) {
+        setState(() {
+          _errorMessage = null; // Reset previous errors
+        });
+        showLoaderDialog(context);
+        final response = await UserSignUp().userSignUp(
+            email: widget.email,
+            password: widget.password,
+            name: widget.password,
+            phno: phoneCtrl.text);
+        Navigator.pop(context);
+        if (response["success"] && mounted) {
+          // Create storage
+          final storage = FlutterSecureStorage();
+          // Write value
+          await storage.write(key: 'authToken', value: response["accessToken"]);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerifyOtp(),
+            ),
+          );
+        } else {
+          setState(() {
+            _errorMessage = response["message"] ?? "Login failed. Try again.";
+          });
+        }
       }
+    } catch (e) {
+      setState(() {
+        _errorMessage = "User Not Found";
+      });
+      print(e);
     }
   }
 
@@ -131,11 +159,25 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           prefixIcon: Image.asset('assets/icons/ic_phone.png'),
                           hintText: "Phone No."),
                     ),
+                    // Show error message if any
+                    SizedBox(
+                      height: 10,
+                    ),
+                    if (_errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Center(
+                          child: Text(
+                            _errorMessage!,
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          ),
+                        ),
+                      ),
                     Spacer(),
                     Center(
                       child: ElevatedButton(
                         onPressed: signUP,
-                        child: Text("Continue"),
+                        child: Text("Sign up"),
                       ),
                     ),
                     Spacer(),

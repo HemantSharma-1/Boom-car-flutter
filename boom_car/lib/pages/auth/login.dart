@@ -2,8 +2,10 @@ import 'package:boom_car/pages/auth/sign_up.dart';
 import 'package:boom_car/pages/home_page.dart';
 import 'package:boom_car/services/auth/login.dart';
 import 'package:boom_car/utils/colors.dart';
+import 'package:boom_car/utils/common_loader.dart';
 import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,17 +19,30 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _errorMessage; // Store error messages
+  
+  @override
+  void dispose() {
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
+    super.dispose();
+  }
 
   void loginUser() async {
     // Validate returns true if the form is valid, or false otherwise.
     try {
-      if (_formKey.currentState!.validate()) {
+      if (_formKey.currentState!.validate() && mounted) {
         setState(() {
           _errorMessage = null; // Reset previous errors
         });
+        showLoaderDialog(context);
         final response = await UserLogin()
             .userLogin(email: emailCtrl.text, password: passwordCtrl.text);
+        Navigator.pop(context);
         if (response["success"] && mounted) {
+          // Create storage
+          final storage = FlutterSecureStorage();
+          // Write value
+          await storage.write(key: 'authToken', value: response["accessToken"]);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
