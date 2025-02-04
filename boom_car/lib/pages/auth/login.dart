@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _errorMessage; // Store error messages
-  
+
   @override
   void dispose() {
     emailCtrl.dispose();
@@ -260,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SignUp(),

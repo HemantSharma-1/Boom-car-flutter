@@ -102,11 +102,12 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => HomePage(),
                           ),
+                          (Route<dynamic> route) => false,
                         );
                       },
                       child: Text("Verify"),

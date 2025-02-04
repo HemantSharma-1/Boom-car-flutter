@@ -46,7 +46,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
             phno: phoneCtrl.text);
         Navigator.pop(context);
         if (response["success"] && mounted) {
-          // Create storage
+          //Create storage
           final storage = FlutterSecureStorage();
           // Write value
           await storage.write(key: 'authToken', value: response["accessToken"]);
@@ -150,6 +150,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       validator: (value) => validator(value),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(numberCharacter),
+                        LengthLimitingTextInputFormatter(10),
                       ],
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(0),

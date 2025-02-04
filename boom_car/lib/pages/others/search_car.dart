@@ -1,3 +1,4 @@
+import 'package:boom_car/pages/others/car_info.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -221,9 +222,13 @@ class Cars extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          FittedBox(
-            fit: BoxFit.fill,
-            child: Image.asset('assets/images/img_car_search.png'),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.asset(
+              'assets/images/img_car_interior_raw.png',
+              fit: BoxFit
+                  .cover, // Ensures the image fills the container properly
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -242,7 +247,7 @@ class Cars extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  'Manual Diesel 4 seats',
+                  'Manual • Diesel • 4 seats',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -335,7 +340,13 @@ class WithoutDriver extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: 3,
-      itemBuilder: (context, index) => Cars(),
+      itemBuilder: (context, index) => GestureDetector(
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CarInformation(),
+              )),
+          child: Cars()),
     );
   }
 }

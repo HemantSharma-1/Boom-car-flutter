@@ -9,6 +9,8 @@ final alphaCharacters = RegExp(r'[a-zA-Z][a-zA-Z\s]*');
 //numbers only
 final numberCharacter = RegExp('[0-9]');
 
+final tenDigitsOnly =  RegExp(r'^\d{0,10}$');
+
 //numbers with decimal
 final numberWithDecimal = RegExp(r'^\d*\.?\d*$');
 

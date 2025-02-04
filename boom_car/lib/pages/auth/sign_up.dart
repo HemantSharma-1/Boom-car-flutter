@@ -3,6 +3,7 @@ import 'package:boom_car/pages/auth/phone_number.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -146,6 +147,9 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       controller: passwordCtrl,
                       validator: (value) => passwordValidator(value),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(16),
+                      ],
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(0),
                         constraints: isSmallScreen
@@ -234,13 +238,13 @@ class _SignUpState extends State<SignUp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("i don't have any account"),
+                          Text("Already Have an account?"),
                           SizedBox(
                             width: 5,
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => LoginPage(),
