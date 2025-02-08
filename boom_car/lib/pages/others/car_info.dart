@@ -1,3 +1,4 @@
+import 'package:boom_car/pages/others/reviews.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,25 @@ class CarInformation extends StatefulWidget {
 
 class _CarInformationState extends State<CarInformation> {
   final ScrollController _scrollController = ScrollController();
+  // Create GlobalKeys for each section
+  final GlobalKey _offersKey = GlobalKey();
+  final GlobalKey _reviewsKey = GlobalKey();
+  final GlobalKey _locationKey = GlobalKey();
+  final GlobalKey _featuresKey = GlobalKey();
+
+  String selectedTitle = '';
+
+  // Function to scroll to a section
+  void _scrollToSection(GlobalKey key, String title) {
+    setState(() {
+      selectedTitle = title;
+    });
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +90,20 @@ class _CarInformationState extends State<CarInformation> {
                       color: secondayColor,
                       size: 12,
                     ),
-                    Text(
-                      "Block-25, Sector 12,Moti Mahal,Delhi",
-                      style: Theme.of(context)
-                          .textTheme
-                          .displaySmall!
-                          .copyWith(color: secondayColor),
+                    Expanded(
+                      child: Text(
+                        "Block-25, Sector 12,Moti Mahal,Delhi",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall!
+                            .copyWith(color: secondayColor),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                      ),
                     ),
-                    Spacer(),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Icon(
                       Icons.star_rate,
                       color: secondayColor,
@@ -93,7 +119,11 @@ class _CarInformationState extends State<CarInformation> {
                     SizedBox(
                       width: 2,
                     ),
-                    Text("178 Reviews")
+                    Text(
+                      "178 Reviews",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    )
                   ],
                 ),
                 SizedBox(
@@ -106,115 +136,52 @@ class _CarInformationState extends State<CarInformation> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      "Offers",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: secondayColor,
-                            fontSize: 16,
-                          ),
+                    GestureDetector(
+                      onTap: () => _scrollToSection(_offersKey, "Offers"),
+                      child: ScrollableTitle(
+                        selectedTitle: selectedTitle,
+                        title: "Offers",
+                      ),
                     ),
-                    Text(
-                      "Reviews",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: secondayColor,
-                            fontSize: 16,
-                          ),
+                    GestureDetector(
+                      onTap: () => _scrollToSection(_reviewsKey, "Reviews"),
+                      child: ScrollableTitle(
+                        selectedTitle: selectedTitle,
+                        title: "Reviews",
+                      ),
                     ),
-                    Text(
-                      "Location",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: secondayColor,
-                            fontSize: 16,
-                          ),
+                    GestureDetector(
+                      onTap: () => _scrollToSection(_locationKey, "Location"),
+                      child: ScrollableTitle(
+                        selectedTitle: selectedTitle,
+                        title: "Location",
+                      ),
                     ),
-                    Text(
-                      "Features",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: secondayColor,
-                            fontSize: 16,
-                          ),
+                    GestureDetector(
+                      onTap: () => _scrollToSection(_featuresKey, "Features"),
+                      child: ScrollableTitle(
+                        selectedTitle: selectedTitle,
+                        title: "Features",
+                      ),
                     ),
-                    Text(
-                      "FAQ's",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: secondayColor,
-                            fontSize: 16,
-                          ),
-                    ),
+                    GestureDetector(
+                      onTap: () => _scrollToSection(_featuresKey, "FAQ's"),
+                      child: ScrollableTitle(
+                        selectedTitle: selectedTitle,
+                        title: "FAQ's",
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      'Exclusive Offers',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 22),
-                    ),
-                    Spacer(),
-                    Text(
-                      'View All',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 18, color: secondayColor),
-                    ),
-                  ],
-                ),
+                // Sections with GlobalKeys
+                Container(key: _offersKey, child: OffersWidget()),
                 SizedBox(
                   height: 20,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: bottomSheetColor,
-                    hintText: "Enter Promo Code",
-                    suffixIcon: Row(
-                      mainAxisSize: MainAxisSize
-                          .min, // Ensures the text doesn't take extra space
-                      children: [
-                        Text(
-                          'APPLY',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                        SizedBox(width: 8),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Rating & Reviews',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 22),
-                    ),
-                    Spacer(),
-                    Image.asset('assets/icons/ic_markers.png'),
-                    Text(
-                      'Based on 20 Trips',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displaySmall!
-                          .copyWith(fontSize: 14),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                RatingReviewWidget(),
+                Container(key: _reviewsKey, child: RatingReviewWidget()),
                 SizedBox(
                   height: 30,
                 ),
@@ -233,145 +200,24 @@ class _CarInformationState extends State<CarInformation> {
                             WidgetStateProperty.all(bottomSheetColor),
                         foregroundColor:
                             WidgetStateProperty.all(secondayColor)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReviewPage(),
+                          ));
+                    },
                     child: Text('View All 16 reviews'),
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: bottomSheetColor,
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 100, // Ensure it has height
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                'Car Location',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall!
-                                    .copyWith(
-                                        color: secondayColor,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.location_on_outlined,
-                                    color: secondayColor),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  // Allows text to wrap properly
-                                  child: Text(
-                                    '#1033, Block 46, Moti mahal, beside Ram mandir, Delhi',
-                                    softWrap: true,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displaySmall,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Icon(Icons.directions_walk_rounded,
-                                    color: secondayColor),
-                                SizedBox(width: 5),
-                                Text(
-                                  "7 Km",
-                                  style:
-                                      Theme.of(context).textTheme.displaySmall,
-                                ),
-                                Spacer(),
-                                Text(
-                                  "58 mins",
-                                  style:
-                                      Theme.of(context).textTheme.displaySmall,
-                                ),
-                                Spacer()
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                Container(key: _locationKey, child: CarLocationWidget()),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  "Features",
-                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: secondayColor,
-                      fontSize: 20),
-                ),
-                SizedBox(
-                  height: 100,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 columns
-                      crossAxisSpacing: 5, // Adds spacing between grid items
-                      mainAxisSpacing: 0,
-                      childAspectRatio: 4, // Adjust to keep Row items closer
-                    ),
-                    physics:
-                        NeverScrollableScrollPhysics(), // Prevents nested scrolling
-                    shrinkWrap: true, // Allows GridView to fit inside Column
-                    itemCount: 4,
-                    itemBuilder: (context, index) => Align(
-                      // Align items properly
-                      alignment: Alignment
-                          .centerLeft, // Ensures content starts from left
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                10), // Adds padding inside the grid cells
-                        child: Row(
-                          children: [
-                            Image.asset('assets/icons/ic_vector.png',
-                                width: 30, height: 30), // Adjust size
-                            SizedBox(width: 10),
-                            Expanded(
-                              // Ensures text doesn't overflow
-                              child: Text(
-                                'Spare tyres',
-                                style: TextStyle(fontSize: 14),
-                                overflow: TextOverflow
-                                    .ellipsis, // Prevents text overflow
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                Container(key: _featuresKey, child: Features()),
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
@@ -482,6 +328,203 @@ class _CarInformationState extends State<CarInformation> {
   }
 }
 
+class Features extends StatelessWidget {
+  const Features({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Features",
+          style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.bold, color: secondayColor, fontSize: 20),
+        ),
+        SizedBox(
+          height: 100,
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // 2 columns
+              crossAxisSpacing: 5, // Adds spacing between grid items
+              mainAxisSpacing: 0,
+              childAspectRatio: 5, // Adjust to keep Row items closer
+            ),
+            physics:
+                NeverScrollableScrollPhysics(), // Prevents nested scrolling
+            shrinkWrap: true, // Allows GridView to fit inside Column
+            itemCount: 4,
+            itemBuilder: (context, index) => Align(
+              // Align items properly
+              alignment:
+                  Alignment.centerLeft, // Ensures content starts from left
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 10), // Adds padding inside the grid cells
+                child: Row(
+                  children: [
+                    Image.asset('assets/icons/ic_vector.png',
+                        width: 30, height: 30), // Adjust size
+                    SizedBox(width: 10),
+                    Expanded(
+                      // Ensures text doesn't overflow
+                      child: Text(
+                        'Spare tyres',
+                        style: TextStyle(fontSize: 14),
+                        overflow:
+                            TextOverflow.ellipsis, // Prevents text overflow
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class OffersWidget extends StatelessWidget {
+  const OffersWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              'Exclusive Offers',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontSize: 22),
+            ),
+            Spacer(),
+            Text(
+              'View All',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontSize: 18, color: secondayColor),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TextField(
+          decoration: InputDecoration(
+            fillColor: bottomSheetColor,
+            hintText: "Enter Promo Code",
+            suffixIcon: Row(
+              mainAxisSize:
+                  MainAxisSize.min, // Ensures the text doesn't take extra space
+              children: [
+                Text(
+                  'APPLY',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                SizedBox(width: 8),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CarLocationWidget extends StatelessWidget {
+  const CarLocationWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: bottomSheetColor,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 120,
+            height: 100, // Ensure it has height
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    'Car Location',
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        color: secondayColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.location_on_outlined, color: secondayColor),
+                    SizedBox(width: 5),
+                    Expanded(
+                      // Allows text to wrap properly
+                      child: Text(
+                        '#1033, Block 46, Moti mahal, beside Ram mandir, Delhi',
+                        softWrap: true,
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.directions_walk_rounded, color: secondayColor),
+                    SizedBox(width: 5),
+                    Text(
+                      "7 Km",
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    Spacer(),
+                    Text(
+                      "58 mins",
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    Spacer()
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Review extends StatelessWidget {
   const Review({
     super.key,
@@ -489,59 +532,61 @@ class Review extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 140,
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: bottomSheetColor,
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Bhushan Kumar",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 16),
-                  ),
-                  Row(
-                    children: [
-                      Image.asset('assets/icons/ic_stars.png'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('4.5 out of 5 rating')
-                    ],
-                  )
-                ],
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'The car is an excellent condition.Brand new car with high quality performance.Highly Recommended.”“The car is an excellent condition.Brand new car with high quality performance.',
-              style: Theme.of(context)
-                  .textTheme
-                  .displaySmall!
-                  .copyWith(color: Colors.white),
+    return LayoutBuilder(builder: (context, constraints) {
+      final screenHeight = MediaQuery.of(context).size.height;
+      final isSmallScreen = screenHeight < 600;
+      return Container(
+        height: 140,
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: bottomSheetColor,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Bhushan Kumar",
+                      style: Theme.of(context)
+                          .textTheme
+                          .displayLarge!
+                          .copyWith(fontSize: 16),
+                    ),
+                    Row(
+                      children: [
+                        Image.asset('assets/icons/ic_stars.png'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('4.5 out of 5 rating')
+                      ],
+                    )
+                  ],
+                )
+              ],
             ),
-          )
-        ],
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'The car is an excellent condition.Brand new car with high quality performance.Highly Recommended.”“The car is an excellent condition.Brand new car with high quality performance.',
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                    color: Colors.white, fontSize: isSmallScreen ? 10 : 12),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -552,147 +597,179 @@ class RatingReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        // Left Column: Rating Summary
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Row(
           children: [
             Text(
-              '4.3',
+              'Rating & Reviews',
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(fontSize: 22),
             ),
-            Image.asset('assets/icons/ic_stars.png'),
+            Spacer(),
+            Image.asset('assets/icons/ic_markers.png'),
             Text(
-              "12,890 ratings",
-              style: Theme.of(context).textTheme.displaySmall,
-            )
+              'Based on 20 Trips',
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall!
+                  .copyWith(fontSize: 14),
+            ),
           ],
         ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            // Left Column: Rating Summary
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '4.3',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                Image.asset('assets/icons/ic_stars.png'),
+                Text(
+                  "12,890 ratings",
+                  style: Theme.of(context).textTheme.displaySmall,
+                )
+              ],
+            ),
 
-        SizedBox(width: 16), // Space between columns
+            SizedBox(width: 16), // Space between columns
 
-        // Right Column: Progress Bar
-        Expanded(
-          // Allows the column to take up remaining space
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+            // Right Column: Progress Bar
+            Expanded(
+              // Allows the column to take up remaining space
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "5",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 14),
+                  Row(
+                    children: [
+                      Text(
+                        "5",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        // Ensures progress bar takes full width
+                        child: LinearProgressIndicator(
+                          value: 0.9,
+                          minHeight: 10,
+                          backgroundColor: bottomSheetColor,
+                          borderRadius: BorderRadius.circular(15),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(secondayColor),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    // Ensures progress bar takes full width
-                    child: LinearProgressIndicator(
-                      value: 0.9,
-                      minHeight: 10,
-                      backgroundColor: bottomSheetColor,
-                      borderRadius: BorderRadius.circular(15),
-                      valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-                    ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        "4",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 0.1,
+                          minHeight: 10,
+                          backgroundColor: bottomSheetColor,
+                          borderRadius: BorderRadius.circular(15),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(secondayColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        "3",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 0.2,
+                          minHeight: 10,
+                          backgroundColor: bottomSheetColor,
+                          borderRadius: BorderRadius.circular(15),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(secondayColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        "2",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 0.3,
+                          minHeight: 10,
+                          backgroundColor: bottomSheetColor,
+                          borderRadius: BorderRadius.circular(15),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(secondayColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        "1",
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 0.4,
+                          minHeight: 10,
+                          backgroundColor: bottomSheetColor,
+                          borderRadius: BorderRadius.circular(15),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(secondayColor),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    "4",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 14),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 0.1,
-                      minHeight: 10,
-                      backgroundColor: bottomSheetColor,
-                      borderRadius: BorderRadius.circular(15),
-                      valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    "3",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 14),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 0.2,
-                      minHeight: 10,
-                      backgroundColor: bottomSheetColor,
-                      borderRadius: BorderRadius.circular(15),
-                      valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    "2",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 14),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 0.3,
-                      minHeight: 10,
-                      backgroundColor: bottomSheetColor,
-                      borderRadius: BorderRadius.circular(15),
-                      valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    "1",
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 14),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 0.4,
-                      minHeight: 10,
-                      backgroundColor: bottomSheetColor,
-                      borderRadius: BorderRadius.circular(15),
-                      valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
@@ -815,6 +892,32 @@ class CarContainer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ScrollableTitle extends StatelessWidget {
+  const ScrollableTitle(
+      {super.key, required this.selectedTitle, required this.title});
+  final String selectedTitle;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        border: selectedTitle == title
+            ? Border(
+                bottom: BorderSide(color: secondayColor, width: 2),
+              )
+            : null,
+      ),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: selectedTitle == title ? secondayColor : Colors.white,
+            fontSize: 16),
       ),
     );
   }

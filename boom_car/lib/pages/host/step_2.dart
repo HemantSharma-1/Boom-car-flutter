@@ -1,0 +1,192 @@
+import 'package:boom_car/pages/host/step_3.dart';
+import 'package:boom_car/utils/colors.dart';
+import 'package:flutter/material.dart';
+
+class Step2 extends StatefulWidget {
+  const Step2({super.key});
+
+  @override
+  State<Step2> createState() => _Step2State();
+}
+
+class _Step2State extends State<Step2> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: secondayColor,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        title: SizedBox(
+          width: 180,
+          child: Column(
+            children: [
+              Text(
+                'Step 2 of 6',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              Align(
+                  alignment: Alignment(-0.3, 0),
+                  child: Image.asset('assets/icons/ic_car.png')),
+              LinearProgressIndicator(
+                value: 0.4,
+                minHeight: 3,
+                backgroundColor: bottomSheetColor,
+                valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
+              )
+            ],
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Image.asset('assets/images/img_step2.png'),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                    fillColor: bottomSheetColor,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: secondayColor,
+                    ),
+                    hintText: "Select Car"),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                    fillColor: bottomSheetColor,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: secondayColor,
+                    ),
+                    hintText: "Select City"),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Choose Sharing Date',
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!
+                    .copyWith(fontSize: 15),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          fillColor: bottomSheetColor,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          prefixIcon:
+                              Image.asset('assets/icons/ic_start_date.png'),
+                          hintText: "Start Date"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          fillColor: bottomSheetColor,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          prefixIcon:
+                              Image.asset('assets/icons/ic_end_date.png'),
+                          hintText: "End Date"),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Center(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    textStyle: WidgetStateProperty.all(
+                      TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    minimumSize: WidgetStateProperty.all(
+                        Size(double.infinity, 50)), // Set min size
+                    maximumSize: WidgetStateProperty.all(
+                        Size(double.infinity, 50)), // Set max size
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Step3(),
+                        ));
+                  },
+                  child: Text(
+                    'NEXT',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

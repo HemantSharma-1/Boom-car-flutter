@@ -198,7 +198,14 @@ class WithDriver extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: 3,
-      itemBuilder: (context, index) => Cars(),
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CarInformation(),
+            )),
+        child: Cars(),
+      ),
     );
   }
 }
