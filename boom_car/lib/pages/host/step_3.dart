@@ -1,4 +1,5 @@
 import 'package:boom_car/pages/host/step_4.dart';
+import 'package:boom_car/pages/host/step_5.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -194,11 +195,19 @@ class _Step3State extends State<Step3> {
                         Size(double.infinity, 50)), // Set max size
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Step4(),
-                        ));
+                    selectedOption == "Self Drive"
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Step5(),
+                            ),
+                          )
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Step4(),
+                            ),
+                          );
                   },
                   child: Text(
                     'NEXT',
