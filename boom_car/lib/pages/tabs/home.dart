@@ -146,10 +146,20 @@ class CategoryWidget extends StatelessWidget {
   }
 }
 
-class BookRide extends StatelessWidget {
+class BookRide extends StatefulWidget {
   const BookRide({
     super.key,
   });
+
+  @override
+  State<BookRide> createState() => _BookRideState();
+}
+
+class _BookRideState extends State<BookRide> {
+  final TextEditingController city = TextEditingController(text: "Mumbai");
+  late DateTime? startDate;
+  late DateTime? endDate;
+  bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -205,12 +215,14 @@ class BookRide extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
+                    startDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2001),
                       lastDate: DateTime(2100),
                     );
+                    print("picked data");
+                    print(startDate);
                   },
                   child: Container(
                     height: 56,
@@ -240,12 +252,14 @@ class BookRide extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
+                    endDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2001),
                       lastDate: DateTime(2100),
                     );
+                    print("picked data");
+                    print(endDate);
                   },
                   child: Container(
                     height: 56,
@@ -277,11 +291,15 @@ class BookRide extends StatelessWidget {
           Row(
             children: [
               Checkbox(
-                value: false,
+                value: value,
                 activeColor: secondayColor,
                 overlayColor: WidgetStateProperty.all(secondayColor),
                 shape: CircleBorder(side: BorderSide(color: secondayColor)),
-                onChanged: (change) {},
+                onChanged: (change) {
+                  setState(() {
+                    value = change!;
+                  });
+                },
               ),
               Text('Delivery & Pick-up from anywhere')
             ],
@@ -289,10 +307,16 @@ class BookRide extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchCars(),
-                  )),
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchCars(
+                    city: city.text,
+                    doorStepDelivery: value,
+                    endDate: endDate!,
+                    startDate: startDate!,
+                  ),
+                ),
+              ),
               style: ButtonStyle(
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(

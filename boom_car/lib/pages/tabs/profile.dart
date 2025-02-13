@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
                 height: 10,
               ),
               Text(
-                "Hi, Krishna",
+                "Hi, Hemant",
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               SizedBox(
@@ -62,7 +62,7 @@ class _ProfileState extends State<Profile> {
               ),
               ProfileTileWidget(
                 title: "Change City",
-                subtitle: "Change Username.Email-ID & Password",
+                subtitle: "Banglore",
                 icon: Image.asset('assets/icons/ic_location.png'),
               ),
               SizedBox(

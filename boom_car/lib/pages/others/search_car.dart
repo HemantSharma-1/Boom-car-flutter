@@ -1,10 +1,21 @@
 import 'package:boom_car/pages/others/car_info.dart';
+import 'package:boom_car/services/car_api/car_list.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SearchCars extends StatefulWidget {
-  const SearchCars({super.key});
-
+  const SearchCars({
+    super.key,
+    required this.city,
+    required this.startDate,
+    required this.endDate,
+    required this.doorStepDelivery,
+  });
+  final String city;
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool doorStepDelivery;
   @override
   State<SearchCars> createState() => _SearchCarsState();
 }
@@ -12,6 +23,7 @@ class SearchCars extends StatefulWidget {
 class _SearchCarsState extends State<SearchCars>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  String type = "Self Drive";
 
   @override
   void initState() {
@@ -23,6 +35,20 @@ class _SearchCarsState extends State<SearchCars>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<String> getCarList() async {
+    final storage = FlutterSecureStorage();
+    // Check if token exists
+    final token = await storage.read(key: 'authToken');
+    final data = CarList().carList(
+        token: token!,
+        state: widget.city,
+        startDate: widget.startDate,
+        endDate: widget.endDate,
+        type: type,
+        doorStepDelivery: widget.doorStepDelivery);
+    return '';
   }
 
   @override
@@ -119,70 +145,76 @@ class _SearchCarsState extends State<SearchCars>
         builder: (context, constraints) {
           final screenHeight = constraints.maxHeight;
           final isSmallScreen = screenHeight < 600;
-          return Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                              constraints: BoxConstraints(maxHeight: 40),
-                              contentPadding: EdgeInsets.all(0),
-                              fillColor: bottomSheetColor,
-                              hintText: "Search for feature,model",
-                              hintStyle: TextStyle(color: Colors.white54),
-                              border:
-                                  Theme.of(context).inputDecorationTheme.border)
-                          .copyWith(
-                        prefixIcon: Image.asset('assets/icons/ic_search.png'),
-                        suffixIcon: Icon(
-                          Icons.filter_alt_rounded,
-                          color: secondayColor,
+          return FutureBuilder<String>(
+              future: getCarList(),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                                    constraints: BoxConstraints(maxHeight: 40),
+                                    contentPadding: EdgeInsets.all(0),
+                                    fillColor: bottomSheetColor,
+                                    hintText: "Search for feature,model",
+                                    hintStyle: TextStyle(color: Colors.white54),
+                                    border: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .border)
+                                .copyWith(
+                              prefixIcon:
+                                  Image.asset('assets/icons/ic_search.png'),
+                              suffixIcon: Icon(
+                                Icons.filter_alt_rounded,
+                                color: secondayColor,
+                              ),
+                            ),
+                          ),
                         ),
+                        Icon(Icons.filter_list_sharp),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TabBar.secondary(
+                      controller: _tabController,
+                      labelColor: secondayColor,
+                      indicatorColor: secondayColor,
+                      dividerColor: Colors.transparent,
+                      unselectedLabelColor: Colors.white,
+                      labelStyle: isSmallScreen
+                          ? Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(fontSize: 12)
+                          : Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(fontSize: 15),
+                      tabs: [
+                        Tab(
+                          text: "WITHOUT DRIVER",
+                        ),
+                        Tab(
+                          text: "WITH DRIVER",
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          WithoutDriver(),
+                          WithDriver(),
+                        ],
                       ),
                     ),
-                  ),
-                  Icon(Icons.filter_list_sharp),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TabBar.secondary(
-                controller: _tabController,
-                labelColor: secondayColor,
-                indicatorColor: secondayColor,
-                dividerColor: Colors.transparent,
-                unselectedLabelColor: Colors.white,
-                labelStyle: isSmallScreen
-                    ? Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 12)
-                    : Theme.of(context)
-                        .textTheme
-                        .displayLarge!
-                        .copyWith(fontSize: 15),
-                tabs: [
-                  Tab(
-                    text: "WITHOUT DRIVER",
-                  ),
-                  Tab(
-                    text: "WITH DRIVER",
-                  ),
-                ],
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    WithoutDriver(),
-                    WithDriver(),
                   ],
-                ),
-              ),
-            ],
-          );
+                );
+              });
         },
       ),
     );
@@ -348,12 +380,14 @@ class WithoutDriver extends StatelessWidget {
     return ListView.builder(
       itemCount: 3,
       itemBuilder: (context, index) => GestureDetector(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CarInformation(),
-              )),
-          child: Cars()),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CarInformation(),
+          ),
+        ),
+        child: Cars(),
+      ),
     );
   }
 }

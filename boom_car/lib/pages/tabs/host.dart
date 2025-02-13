@@ -164,26 +164,23 @@ class _HostState extends State<Host> {
               SizedBox(
                 height: 5,
               ),
-              Row(
-                children: [
-                  Text(
-                    'Potential monethy earning',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(fontSize: 16, color: Colors.white),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    '₹27000 - ₹30000',
-                    style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                        color: secondayColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  )
-                ],
+              RichText(
+                text: TextSpan(
+                  text: 'Potential monethy earning ',
+                  style: Theme.of(context)
+                      .textTheme
+                      .displaySmall!
+                      .copyWith(fontSize: 16, color: Colors.white),
+                  children: [
+                    TextSpan(
+                      text: '₹27000 - ₹30000',
+                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                          color: secondayColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

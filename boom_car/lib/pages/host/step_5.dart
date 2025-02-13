@@ -94,45 +94,48 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(options.length, (index) {
-                  bool isSelected = index == selectedIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 5), // Space between buttons
-                      decoration: BoxDecoration(
-                        color: bottomSheetColor, // Background color
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded corners
-                        border: Border.all(
-                          color: isSelected
-                              ? secondayColor
-                              : Colors.transparent, // Border color
-                          width: isSelected
-                              ? 2
-                              : 1, // Thicker border for selected button
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(options.length, (index) {
+                    bool isSelected = index == selectedIndex;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5), // Space between buttons
+                        decoration: BoxDecoration(
+                          color: bottomSheetColor, // Background color
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                          border: Border.all(
+                            color: isSelected
+                                ? secondayColor
+                                : Colors.transparent, // Border color
+                            width: isSelected
+                                ? 2
+                                : 1, // Thicker border for selected button
+                          ),
+                        ),
+                        child: Text(
+                          options[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      child: Text(
-                        options[index],
-                        style: Theme.of(context)
-                            .textTheme
-                            .displayLarge!
-                            .copyWith(
-                                fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -151,45 +154,48 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(options.length, (index) {
-                  bool isSelected = index == selectedIndex1;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex1 = index;
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 5), // Space between buttons
-                      decoration: BoxDecoration(
-                        color: bottomSheetColor, // Background color
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded corners
-                        border: Border.all(
-                          color: isSelected
-                              ? secondayColor
-                              : Colors.transparent, // Border color
-                          width: isSelected
-                              ? 2
-                              : 1, // Thicker border for selected button
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(options.length, (index) {
+                    bool isSelected = index == selectedIndex1;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex1 = index;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5), // Space between buttons
+                        decoration: BoxDecoration(
+                          color: bottomSheetColor, // Background color
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                          border: Border.all(
+                            color: isSelected
+                                ? secondayColor
+                                : Colors.transparent, // Border color
+                            width: isSelected
+                                ? 2
+                                : 1, // Thicker border for selected button
+                          ),
+                        ),
+                        child: Text(
+                          options[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      child: Text(
-                        options[index],
-                        style: Theme.of(context)
-                            .textTheme
-                            .displayLarge!
-                            .copyWith(
-                                fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -208,45 +214,51 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(options.length, (index) {
-                  bool isSelected = index == selectedIndex2;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex2 = index;
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 5), // Space between buttons
-                      decoration: BoxDecoration(
-                        color: bottomSheetColor, // Background color
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded corners
-                        border: Border.all(
-                          color: isSelected
-                              ? secondayColor
-                              : Colors.transparent, // Border color
-                          width: isSelected
-                              ? 2
-                              : 1, // Thicker border for selected button
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.start, // Align items at the start
+                  children: List.generate(options.length, (index) {
+                    bool isSelected = index == selectedIndex2;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex2 = index;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5), // Space between buttons
+                        decoration: BoxDecoration(
+                          color: bottomSheetColor, // Background color
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                          border: Border.all(
+                            color: isSelected
+                                ? secondayColor
+                                : Colors.transparent, // Border color
+                            width: isSelected
+                                ? 2
+                                : 1, // Thicker border for selected button
+                          ),
+                        ),
+                        child: Text(
+                          durationOptions[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ),
-                      child: Text(
-                        durationOptions[index],
-                        style: Theme.of(context)
-                            .textTheme
-                            .displayLarge!
-                            .copyWith(
-                                fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
               SizedBox(
                 height: 40,
