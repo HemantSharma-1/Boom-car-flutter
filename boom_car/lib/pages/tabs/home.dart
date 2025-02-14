@@ -2,6 +2,7 @@ import 'package:boom_car/pages/others/search_car.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -67,9 +68,6 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              // SizedBox(
-              //   height: 10,
-              // ),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -156,9 +154,9 @@ class BookRide extends StatefulWidget {
 }
 
 class _BookRideState extends State<BookRide> {
-  final TextEditingController city = TextEditingController(text: "Mumbai");
-  late DateTime? startDate;
-  late DateTime? endDate;
+  final TextEditingController cityCntrl = TextEditingController(text: "Mumbai");
+  late DateTime startDate = DateTime(2025, 1, 21);
+  late DateTime endDate = DateTime(2025, 1, 25);
   bool value = false;
 
   @override
@@ -189,6 +187,7 @@ class _BookRideState extends State<BookRide> {
             height: 25,
           ),
           TextField(
+            controller: cityCntrl,
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -215,18 +214,34 @@ class _BookRideState extends State<BookRide> {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    startDate = await showDatePicker(
+                    DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2001),
                       lastDate: DateTime(2100),
                     );
-                    print("picked data");
-                    print(startDate);
+
+                    if (pickedDate != null && mounted) {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (pickedTime != null) {
+                        startDate = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+
+                        setState(() {});
+                      }
+                    }
                   },
                   child: Container(
                     height: 56,
-                    width: 100,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -234,11 +249,11 @@ class _BookRideState extends State<BookRide> {
                       border: Border.all(color: secondayColor),
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Start Date'),
                         Text(
-                          'Jan 21, 2025',
+                          DateFormat('MMM dd, yyyy h:mm a').format(startDate),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -247,23 +262,39 @@ class _BookRideState extends State<BookRide> {
                 ),
               ),
               SizedBox(
-                width: 50,
+                width: 30,
               ),
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    endDate = await showDatePicker(
+                    DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2001),
                       lastDate: DateTime(2100),
                     );
-                    print("picked data");
-                    print(endDate);
+
+                    if (pickedDate != null && mounted) {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (pickedTime != null) {
+                        endDate = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+
+                        setState(() {});
+                      }
+                    }
                   },
                   child: Container(
                     height: 56,
-                    width: 100,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -271,11 +302,11 @@ class _BookRideState extends State<BookRide> {
                       border: Border.all(color: secondayColor),
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('End Date'),
                         Text(
-                          'Jan 25, 2025',
+                          DateFormat('MMM dd, yyyy h:mm a').format(endDate),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -310,10 +341,10 @@ class _BookRideState extends State<BookRide> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => SearchCars(
-                    city: city.text,
+                    city: cityCntrl.text,
                     doorStepDelivery: value,
-                    endDate: endDate!,
-                    startDate: startDate!,
+                    endDate: endDate,
+                    startDate: startDate,
                   ),
                 ),
               ),

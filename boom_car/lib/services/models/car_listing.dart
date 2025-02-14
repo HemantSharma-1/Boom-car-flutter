@@ -9,92 +9,63 @@ List<CarListing> carListingFromMap(String str) => List<CarListing>.from(json.dec
 String carListingToMap(List<CarListing> data) => json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
 class CarListing {
-    CarImages? carImages;
-    RatingsAndReviews? ratingsAndReviews;
     String? id;
+    String? city;
+    String? carLocation;
     Car? car;
-    String? ownerName;
-    String? registrationNumber;
-    String? chassisNumber;
-    String? engineNumber;
+    CarImages? carImages;
     String? carListingFor;
-    bool? nightBookingAvailable;
-    int? minimumBookingDuration;
-    int? interBookingDuration;
-    int? maximumBookingDuration;
-    bool? isListingApproved;
-    bool? isPaused;
     bool? fastTagAvailable;
     int? totalTripsCompleted;
-    int? v;
+    RatingsAndReviews? ratingsAndReviews;
+    DateTime? createdAt;
+    DateTime? updatedAt;
 
     CarListing({
-        this.carImages,
-        this.ratingsAndReviews,
         this.id,
+        this.city,
+        this.carLocation,
         this.car,
-        this.ownerName,
-        this.registrationNumber,
-        this.chassisNumber,
-        this.engineNumber,
+        this.carImages,
         this.carListingFor,
-        this.nightBookingAvailable,
-        this.minimumBookingDuration,
-        this.interBookingDuration,
-        this.maximumBookingDuration,
-        this.isListingApproved,
-        this.isPaused,
         this.fastTagAvailable,
         this.totalTripsCompleted,
-        this.v,
+        this.ratingsAndReviews,
+        this.createdAt,
+        this.updatedAt,
     });
 
     factory CarListing.fromMap(Map<String, dynamic> json) => CarListing(
-        carImages: json["carImages"] == null ? null : CarImages.fromMap(json["carImages"]),
-        ratingsAndReviews: json["ratingsAndReviews"] == null ? null : RatingsAndReviews.fromMap(json["ratingsAndReviews"]),
-        id: json["_id"],
+        id: json["id"],
+        city: json["city"],
+        carLocation: json["carLocation"],
         car: json["car"] == null ? null : Car.fromMap(json["car"]),
-        ownerName: json["ownerName"],
-        registrationNumber: json["registrationNumber"],
-        chassisNumber: json["chassisNumber"],
-        engineNumber: json["engineNumber"],
+        carImages: json["carImages"] == null ? null : CarImages.fromMap(json["carImages"]),
         carListingFor: json["carListingFor"],
-        nightBookingAvailable: json["nightBookingAvailable"],
-        minimumBookingDuration: json["minimumBookingDuration"],
-        interBookingDuration: json["interBookingDuration"],
-        maximumBookingDuration: json["maximumBookingDuration"],
-        isListingApproved: json["isListingApproved"],
-        isPaused: json["isPaused"],
         fastTagAvailable: json["fastTagAvailable"],
         totalTripsCompleted: json["totalTripsCompleted"],
-        v: json["__v"],
+        ratingsAndReviews: json["ratingsAndReviews"] == null ? null : RatingsAndReviews.fromMap(json["ratingsAndReviews"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     );
 
     Map<String, dynamic> toMap() => {
-        "carImages": carImages?.toMap(),
-        "ratingsAndReviews": ratingsAndReviews?.toMap(),
-        "_id": id,
+        "id": id,
+        "city": city,
+        "carLocation": carLocation,
         "car": car?.toMap(),
-        "ownerName": ownerName,
-        "registrationNumber": registrationNumber,
-        "chassisNumber": chassisNumber,
-        "engineNumber": engineNumber,
+        "carImages": carImages?.toMap(),
         "carListingFor": carListingFor,
-        "nightBookingAvailable": nightBookingAvailable,
-        "minimumBookingDuration": minimumBookingDuration,
-        "interBookingDuration": interBookingDuration,
-        "maximumBookingDuration": maximumBookingDuration,
-        "isListingApproved": isListingApproved,
-        "isPaused": isPaused,
         "fastTagAvailable": fastTagAvailable,
         "totalTripsCompleted": totalTripsCompleted,
-        "__v": v,
+        "ratingsAndReviews": ratingsAndReviews?.toMap(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
     };
 }
 
 class Car {
-    Pricing? pricing;
-    String? id;
+    String? carId;
     String? brandName;
     String? model;
     String? variant;
@@ -103,11 +74,10 @@ class Car {
     String? fuelType;
     String? transmission;
     int? seatCapacity;
-    int? v;
+    Pricing? pricing;
 
     Car({
-        this.pricing,
-        this.id,
+        this.carId,
         this.brandName,
         this.model,
         this.variant,
@@ -116,12 +86,11 @@ class Car {
         this.fuelType,
         this.transmission,
         this.seatCapacity,
-        this.v,
+        this.pricing,
     });
 
     factory Car.fromMap(Map<String, dynamic> json) => Car(
-        pricing: json["pricing"] == null ? null : Pricing.fromMap(json["pricing"]),
-        id: json["_id"],
+        carId: json["carId"],
         brandName: json["brandName"],
         model: json["model"],
         variant: json["variant"],
@@ -130,12 +99,11 @@ class Car {
         fuelType: json["fuelType"],
         transmission: json["transmission"],
         seatCapacity: json["seatCapacity"],
-        v: json["__v"],
+        pricing: json["pricing"] == null ? null : Pricing.fromMap(json["pricing"]),
     );
 
     Map<String, dynamic> toMap() => {
-        "pricing": pricing?.toMap(),
-        "_id": id,
+        "carId": carId,
         "brandName": brandName,
         "model": model,
         "variant": variant,
@@ -144,20 +112,48 @@ class Car {
         "fuelType": fuelType,
         "transmission": transmission,
         "seatCapacity": seatCapacity,
-        "__v": v,
+        "pricing": pricing?.toMap(),
     };
 }
 
 class Pricing {
+    FiveToSevenDays? lessThan24H;
+    FiveToSevenDays? oneToThreeDays;
+    FiveToSevenDays? threeToFiveDays;
+    FiveToSevenDays? fiveToSevenDays;
+
+    Pricing({
+        this.lessThan24H,
+        this.oneToThreeDays,
+        this.threeToFiveDays,
+        this.fiveToSevenDays,
+    });
+
+    factory Pricing.fromMap(Map<String, dynamic> json) => Pricing(
+        lessThan24H: json["lessThan24h"] == null ? null : FiveToSevenDays.fromMap(json["lessThan24h"]),
+        oneToThreeDays: json["oneToThreeDays"] == null ? null : FiveToSevenDays.fromMap(json["oneToThreeDays"]),
+        threeToFiveDays: json["threeToFiveDays"] == null ? null : FiveToSevenDays.fromMap(json["threeToFiveDays"]),
+        fiveToSevenDays: json["fiveToSevenDays"] == null ? null : FiveToSevenDays.fromMap(json["fiveToSevenDays"]),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "lessThan24h": lessThan24H?.toMap(),
+        "oneToThreeDays": oneToThreeDays?.toMap(),
+        "threeToFiveDays": threeToFiveDays?.toMap(),
+        "fiveToSevenDays": fiveToSevenDays?.toMap(),
+    };
+}
+
+class FiveToSevenDays {
     int? minHourlyPrice;
     int? maxHourlyPrice;
 
-    Pricing({
+    FiveToSevenDays({
         this.minHourlyPrice,
         this.maxHourlyPrice,
     });
 
-    factory Pricing.fromMap(Map<String, dynamic> json) => Pricing(
+    factory FiveToSevenDays.fromMap(Map<String, dynamic> json) => FiveToSevenDays(
         minHourlyPrice: json["minHourlyPrice"],
         maxHourlyPrice: json["maxHourlyPrice"],
     );
@@ -170,17 +166,29 @@ class Pricing {
 
 class CarImages {
     String? coverImage;
+    List<String>? exteriorImages;
+    List<String>? interiorImages;
+    List<String>? exteriorWithLicensePlateImages;
 
     CarImages({
         this.coverImage,
+        this.exteriorImages,
+        this.interiorImages,
+        this.exteriorWithLicensePlateImages,
     });
 
     factory CarImages.fromMap(Map<String, dynamic> json) => CarImages(
         coverImage: json["coverImage"],
+        exteriorImages: json["exteriorImages"] == null ? [] : List<String>.from(json["exteriorImages"]!.map((x) => x)),
+        interiorImages: json["interiorImages"] == null ? [] : List<String>.from(json["interiorImages"]!.map((x) => x)),
+        exteriorWithLicensePlateImages: json["exteriorWithLicensePlateImages"] == null ? [] : List<String>.from(json["exteriorWithLicensePlateImages"]!.map((x) => x)),
     );
 
     Map<String, dynamic> toMap() => {
         "coverImage": coverImage,
+        "exteriorImages": exteriorImages == null ? [] : List<dynamic>.from(exteriorImages!.map((x) => x)),
+        "interiorImages": interiorImages == null ? [] : List<dynamic>.from(interiorImages!.map((x) => x)),
+        "exteriorWithLicensePlateImages": exteriorWithLicensePlateImages == null ? [] : List<dynamic>.from(exteriorWithLicensePlateImages!.map((x) => x)),
     };
 }
 
@@ -188,26 +196,22 @@ class RatingsAndReviews {
     int? totalRatingsCount;
     int? totalReviewsCount;
     int? averageRating;
-    List<dynamic>? reviewers;
 
     RatingsAndReviews({
         this.totalRatingsCount,
         this.totalReviewsCount,
         this.averageRating,
-        this.reviewers,
     });
 
     factory RatingsAndReviews.fromMap(Map<String, dynamic> json) => RatingsAndReviews(
         totalRatingsCount: json["totalRatingsCount"],
         totalReviewsCount: json["totalReviewsCount"],
         averageRating: json["averageRating"],
-        reviewers: json["reviewers"] == null ? [] : List<dynamic>.from(json["reviewers"]!.map((x) => x)),
     );
 
     Map<String, dynamic> toMap() => {
         "totalRatingsCount": totalRatingsCount,
         "totalReviewsCount": totalReviewsCount,
         "averageRating": averageRating,
-        "reviewers": reviewers == null ? [] : List<dynamic>.from(reviewers!.map((x) => x)),
     };
 }

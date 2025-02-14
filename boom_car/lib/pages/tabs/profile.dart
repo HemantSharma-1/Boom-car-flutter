@@ -12,6 +12,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String name = '';
+  @override
+  void initState() {
+    super.initState();
+    getName();
+  }
+
+  getName() async {
+    final storage = FlutterSecureStorage();
+    // Check if token exists
+    name = (await storage.read(key: 'name'))!;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +50,7 @@ class _ProfileState extends State<Profile> {
                 height: 10,
               ),
               Text(
-                "Hi, Hemant",
+                "Hi, $name",
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               SizedBox(

@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
           final storage = FlutterSecureStorage();
           // Write value
           await storage.write(key: 'authToken', value: response["accessToken"]);
+          await storage.write(key: 'name', value: response["user"]["name"]);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

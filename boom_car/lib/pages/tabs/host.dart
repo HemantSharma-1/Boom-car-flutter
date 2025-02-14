@@ -96,7 +96,7 @@ class _HostState extends State<Host> {
                             Icons.check_circle,
                             color: secondayColor,
                           ),
-                          Text('100% assurance policy'),
+                          Expanded(child: Text('100% assurance policy')),
                           SizedBox(
                             width: 20,
                           ),
@@ -104,7 +104,7 @@ class _HostState extends State<Host> {
                             Icons.check_circle,
                             color: secondayColor,
                           ),
-                          Text('Enhanced Protection'),
+                          Expanded(child: Text('Enhanced Protection')),
                         ],
                       ),
                       SizedBox(

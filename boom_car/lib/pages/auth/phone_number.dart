@@ -50,6 +50,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           final storage = FlutterSecureStorage();
           // Write value
           await storage.write(key: 'authToken', value: response["accessToken"]);
+          await storage.write(key: 'name', value: response["user"]["name"]);
           Navigator.push(
             context,
             MaterialPageRoute(
