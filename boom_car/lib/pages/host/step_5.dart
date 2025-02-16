@@ -94,48 +94,57 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(options.length, (index) {
-                    bool isSelected = index == selectedIndex;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = index;
-                        });
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5), // Space between buttons
-                        decoration: BoxDecoration(
-                          color: bottomSheetColor, // Background color
-                          borderRadius:
-                              BorderRadius.circular(10), // Rounded corners
-                          border: Border.all(
-                            color: isSelected
-                                ? secondayColor
-                                : Colors.transparent, // Border color
-                            width: isSelected
-                                ? 2
-                                : 1, // Thicker border for selected button
-                          ),
+              GridView.builder(
+                shrinkWrap:
+                    true, // Ensures GridView does not take infinite height
+                physics:
+                    NeverScrollableScrollPhysics(), // Disables scrolling inside GridView
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 columns
+                  crossAxisSpacing: 10, // Space between columns
+                  mainAxisSpacing: 10, // Space between rows
+                  childAspectRatio: 5, // Adjusts height-to-width ratio
+                ),
+                itemCount: options.length,
+                itemBuilder: (context, index) {
+                  bool isSelected = index == selectedIndex;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: bottomSheetColor, // Background color
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                        border: Border.all(
+                          color: isSelected
+                              ? secondayColor
+                              : Colors.transparent, // Border color
+                          width: isSelected
+                              ? 2
+                              : 1, // Thicker border for selected button
                         ),
+                      ),
+                      child: Center(
                         child: Text(
                           options[index],
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge!
                               .copyWith(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 height: 20,
@@ -154,48 +163,57 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(options.length, (index) {
-                    bool isSelected = index == selectedIndex1;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex1 = index;
-                        });
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5), // Space between buttons
-                        decoration: BoxDecoration(
-                          color: bottomSheetColor, // Background color
-                          borderRadius:
-                              BorderRadius.circular(10), // Rounded corners
-                          border: Border.all(
-                            color: isSelected
-                                ? secondayColor
-                                : Colors.transparent, // Border color
-                            width: isSelected
-                                ? 2
-                                : 1, // Thicker border for selected button
-                          ),
+              GridView.builder(
+                shrinkWrap:
+                    true, // Ensures GridView does not take infinite height
+                physics:
+                    NeverScrollableScrollPhysics(), // Disables scrolling inside GridView
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 columns
+                  crossAxisSpacing: 10, // Space between columns
+                  mainAxisSpacing: 10, // Space between rows
+                  childAspectRatio: 5, // Adjusts height-to-width ratio
+                ),
+                itemCount: options.length,
+                itemBuilder: (context, index) {
+                  bool isSelected = index == selectedIndex1;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex1 = index;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: bottomSheetColor, // Background color
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                        border: Border.all(
+                          color: isSelected
+                              ? secondayColor
+                              : Colors.transparent, // Border color
+                          width: isSelected
+                              ? 2
+                              : 1, // Thicker border for selected button
                         ),
+                      ),
+                      child: Center(
                         child: Text(
                           options[index],
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge!
                               .copyWith(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 height: 20,
@@ -214,37 +232,43 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 5,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.start, // Align items at the start
-                  children: List.generate(options.length, (index) {
-                    bool isSelected = index == selectedIndex2;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex2 = index;
-                        });
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5), // Space between buttons
-                        decoration: BoxDecoration(
-                          color: bottomSheetColor, // Background color
-                          borderRadius:
-                              BorderRadius.circular(10), // Rounded corners
-                          border: Border.all(
-                            color: isSelected
-                                ? secondayColor
-                                : Colors.transparent, // Border color
-                            width: isSelected
-                                ? 2
-                                : 1, // Thicker border for selected button
-                          ),
+              GridView.builder(
+                shrinkWrap:
+                    true, // Ensures GridView does not take infinite height
+                physics:
+                    NeverScrollableScrollPhysics(), // Disables scrolling inside GridView
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 columns
+                  crossAxisSpacing: 10, // Space between columns
+                  mainAxisSpacing: 10, // Space between rows
+                  childAspectRatio: 5, // Adjusts height-to-width ratio
+                ),
+                itemCount: durationOptions.length,
+                itemBuilder: (context, index) {
+                  bool isSelected = index == selectedIndex2;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex2 = index;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: bottomSheetColor, // Background color
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                        border: Border.all(
+                          color: isSelected
+                              ? secondayColor
+                              : Colors.transparent, // Border color
+                          width: isSelected
+                              ? 2
+                              : 1, // Thicker border for selected button
                         ),
+                      ),
+                      child: Center(
                         child: Text(
                           durationOptions[index],
                           style: Theme.of(context)
@@ -256,12 +280,12 @@ class _Step5State extends State<Step5> {
                               ),
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Center(
                 child: ElevatedButton(

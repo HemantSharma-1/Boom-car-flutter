@@ -14,10 +14,8 @@ class CarList {
     required bool doorStepDelivery,
   }) async {
     try {
-      print(startDate);
-      print(endDate);
       final uri = Uri.parse(
-          '$baseUrl/listing/all?city=$state&startDate=2025-02-11T00:00:00.000Z&endDate=2025-02-18T00:00:00.000Z&carListingFor=$type&doorStepDelivery=$doorStepDelivery');
+          '$baseUrl/listing/all?city=$state&startDate=$startDate&endDate=$endDate&carListingFor=$type&doorStepDelivery=$doorStepDelivery');
       final response = await http.get(
         uri,
         headers: {

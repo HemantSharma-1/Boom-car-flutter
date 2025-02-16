@@ -295,7 +295,9 @@ class WithDriver extends StatelessWidget {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CarInformation(),
+            builder: (context) => CarInformation(
+              id: carListing[index].id!,
+            ),
           ),
         ),
         child: Cars(
@@ -466,7 +468,9 @@ class WithoutDriver extends StatelessWidget {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CarInformation(),
+            builder: (context) => CarInformation(
+              id: carListing[index].id!,
+            ),
           ),
         ),
         child: Cars(

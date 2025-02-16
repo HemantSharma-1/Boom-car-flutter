@@ -1,10 +1,12 @@
 import 'package:boom_car/pages/others/reviews.dart';
+import 'package:boom_car/services/car_api/car_info.dart';
+import 'package:boom_car/services/models/car_information.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CarInformation extends StatefulWidget {
-  const CarInformation({super.key});
-
+  const CarInformation({super.key, required this.id});
+  final String id;
   @override
   State<CarInformation> createState() => _CarInformationState();
 }
@@ -16,8 +18,15 @@ class _CarInformationState extends State<CarInformation> {
   final GlobalKey _reviewsKey = GlobalKey();
   final GlobalKey _locationKey = GlobalKey();
   final GlobalKey _featuresKey = GlobalKey();
+  CarInformationModel? carInformation;
 
   String selectedTitle = '';
+
+  Future<String> getCarInfo() async {
+    carInformation =
+        await CarInformationService().carInformation(id: widget.id);
+    return '';
+  }
 
   // Function to scroll to a section
   void _scrollToSection(GlobalKey key, String title) {
@@ -79,194 +88,239 @@ class _CarInformationState extends State<CarInformation> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      color: secondayColor,
-                      size: 12,
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Block-25, Sector 12,Moti Mahal,Delhi",
-                        style: Theme.of(context)
-                            .textTheme
-                            .displaySmall!
-                            .copyWith(color: secondayColor),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.star_rate,
-                      color: secondayColor,
-                      size: 16,
-                    ),
-                    Text(
-                      '4.7',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: secondayColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Text(
-                      "178 Reviews",
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                CarContainer(),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _scrollToSection(_offersKey, "Offers"),
-                      child: ScrollableTitle(
-                        selectedTitle: selectedTitle,
-                        title: "Offers",
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _scrollToSection(_reviewsKey, "Reviews"),
-                      child: ScrollableTitle(
-                        selectedTitle: selectedTitle,
-                        title: "Reviews",
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _scrollToSection(_locationKey, "Location"),
-                      child: ScrollableTitle(
-                        selectedTitle: selectedTitle,
-                        title: "Location",
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _scrollToSection(_featuresKey, "Features"),
-                      child: ScrollableTitle(
-                        selectedTitle: selectedTitle,
-                        title: "Features",
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _scrollToSection(_featuresKey, "FAQ's"),
-                      child: ScrollableTitle(
-                        selectedTitle: selectedTitle,
-                        title: "FAQ's",
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                // Sections with GlobalKeys
-                Container(key: _offersKey, child: OffersWidget()),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(key: _reviewsKey, child: RatingReviewWidget()),
-                SizedBox(
-                  height: 30,
-                ),
-                Review(),
-                SizedBox(
-                  height: 20,
-                ),
-                Review(),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(bottomSheetColor),
-                        foregroundColor:
-                            WidgetStateProperty.all(secondayColor)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReviewPage(),
-                          ));
-                    },
-                    child: Text('View All 16 reviews'),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(key: _locationKey, child: CarLocationWidget()),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(key: _featuresKey, child: Features()),
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: bottomSheetColor,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/images/img_cross.png'),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Cancellation Unavailable',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayLarge!
-                                .copyWith(
-                                  fontSize: 14,
-                                  color: secondayColor,
-                                ),
+            child: FutureBuilder<String>(
+                future: getCarInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Icon(
+                              Icons.location_on_outlined,
+                              color: secondayColor,
+                              size: 12,
+                            ),
+                            Expanded(
+                              child: Text(
+                                carInformation!.carLocation!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall!
+                                    .copyWith(color: secondayColor),
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              Icons.star_rate,
+                              color: secondayColor,
+                              size: 16,
+                            ),
+                            Text(
+                              carInformation!.ratingsAndReviews!.averageRating
+                                  .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color: secondayColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              "${carInformation!.ratingsAndReviews!.totalReviewsCount.toString()} Reviews",
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        CarContainer(
+                          carInformation:
+                              "${carInformation!.car!.transmission!} • ${carInformation!.car!.variant} • ${carInformation!.car!.seatCapacity}",
+                          carName:
+                              "${carInformation!.car!.brandName!} ${carInformation!.car!.model} ${carInformation!.car!.year}",
+                          name: carInformation!.hostedBy!.name!,
+                          trips: carInformation!.totalTripsCompleted.toString(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () =>
+                                  _scrollToSection(_offersKey, "Offers"),
+                              child: ScrollableTitle(
+                                selectedTitle: selectedTitle,
+                                title: "Offers",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  _scrollToSection(_reviewsKey, "Reviews"),
+                              child: ScrollableTitle(
+                                selectedTitle: selectedTitle,
+                                title: "Reviews",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  _scrollToSection(_locationKey, "Location"),
+                              child: ScrollableTitle(
+                                selectedTitle: selectedTitle,
+                                title: "Location",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  _scrollToSection(_featuresKey, "Features"),
+                              child: ScrollableTitle(
+                                selectedTitle: selectedTitle,
+                                title: "Features",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  _scrollToSection(_featuresKey, "FAQ's"),
+                              child: ScrollableTitle(
+                                selectedTitle: selectedTitle,
+                                title: "FAQ's",
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        // Sections with GlobalKeys
+                        Container(key: _offersKey, child: OffersWidget()),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            key: _reviewsKey,
+                            child: RatingReviewWidget(
+                              rating: carInformation!
+                                  .ratingsAndReviews!.averageRating
+                                  .toString(),
+                              ratings: carInformation!
+                                  .ratingsAndReviews!.totalRatingsCount
+                                  .toString(),
+                              trips: carInformation!.totalTripsCompleted
+                                  .toString(),
+                            )),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Review(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Review(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    WidgetStateProperty.all(bottomSheetColor),
+                                foregroundColor:
+                                    WidgetStateProperty.all(secondayColor)),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReviewPage(),
+                                  ));
+                            },
+                            child: Text('View All 16 reviews'),
                           ),
-                          SizedBox(
-                            height: 10,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            key: _locationKey,
+                            child: CarLocationWidget(
+                              location: carInformation!.carLocation!,
+                            )),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(key: _featuresKey, child: Features()),
+                        Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: bottomSheetColor,
                           ),
-                          Text(
-                            'This booking is non-refundable',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall!
-                                .copyWith(
-                                  fontSize: 14,
-                                ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 90,
-                )
-              ],
-            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/images/img_cross.png'),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Cancellation Unavailable',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge!
+                                        .copyWith(
+                                          fontSize: 14,
+                                          color: secondayColor,
+                                        ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'This booking is non-refundable',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall!
+                                        .copyWith(
+                                          fontSize: 14,
+                                        ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 90,
+                        )
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Something went wrong'),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ),
         ),
         bottomSheet: BottomSheet(
@@ -445,9 +499,9 @@ class OffersWidget extends StatelessWidget {
 }
 
 class CarLocationWidget extends StatelessWidget {
-  const CarLocationWidget({
-    super.key,
-  });
+  const CarLocationWidget({super.key, required this.location});
+
+  final String location;
 
   @override
   Widget build(BuildContext context) {
@@ -492,7 +546,7 @@ class CarLocationWidget extends StatelessWidget {
                     Expanded(
                       // Allows text to wrap properly
                       child: Text(
-                        '#1033, Block 46, Moti mahal, beside Ram mandir, Delhi',
+                        location,
                         softWrap: true,
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
@@ -591,10 +645,15 @@ class Review extends StatelessWidget {
 }
 
 class RatingReviewWidget extends StatelessWidget {
-  const RatingReviewWidget({
-    super.key,
-  });
+  const RatingReviewWidget(
+      {super.key,
+      required this.rating,
+      required this.ratings,
+      required this.trips});
 
+  final String trips;
+  final String rating;
+  final String ratings;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -611,7 +670,7 @@ class RatingReviewWidget extends StatelessWidget {
             Spacer(),
             Image.asset('assets/icons/ic_markers.png'),
             Text(
-              'Based on 20 Trips',
+              'Based on $trips Trips',
               style: Theme.of(context)
                   .textTheme
                   .displaySmall!
@@ -629,7 +688,7 @@ class RatingReviewWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '4.3',
+                  rating,
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -637,7 +696,7 @@ class RatingReviewWidget extends StatelessWidget {
                 ),
                 Image.asset('assets/icons/ic_stars.png'),
                 Text(
-                  "12,890 ratings",
+                  "$ratings ratings",
                   style: Theme.of(context).textTheme.displaySmall,
                 )
               ],
@@ -777,9 +836,16 @@ class RatingReviewWidget extends StatelessWidget {
 }
 
 class CarContainer extends StatelessWidget {
-  const CarContainer({
-    super.key,
-  });
+  const CarContainer(
+      {super.key,
+      required this.carInformation,
+      required this.carName,
+      required this.name,
+      required this.trips});
+  final String name;
+  final String carName;
+  final String carInformation;
+  final String trips;
 
   @override
   Widget build(BuildContext context) {
@@ -822,13 +888,13 @@ class CarContainer extends StatelessWidget {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Hosted By Bhadur',
+                              Text('Hosted By $name',
                                   style:
                                       Theme.of(context).textTheme.displaySmall)
                             ],
                           ),
                           Text(
-                            'Mahindra Scorpio N 2023',
+                            carName,
                             style: Theme.of(context)
                                 .textTheme
                                 .displayLarge!
@@ -836,7 +902,7 @@ class CarContainer extends StatelessWidget {
                                     fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            'Manual • Diesel • 4 seats',
+                            carInformation,
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ],
@@ -853,7 +919,7 @@ class CarContainer extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '10 Trips',
+                          '$trips Trips',
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -904,21 +970,29 @@ class ScrollableTitle extends StatelessWidget {
   final String title;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        border: selectedTitle == title
-            ? Border(
-                bottom: BorderSide(color: secondayColor, width: 2),
-              )
-            : null,
-      ),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: selectedTitle == title ? secondayColor : Colors.white,
-            fontSize: 16),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenHeight = MediaQuery.of(context).size.height;
+        print(screenHeight);
+        final isSmallScreen = screenHeight < 600;
+        print(isSmallScreen);
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            border: selectedTitle == title
+                ? Border(
+                    bottom: BorderSide(color: secondayColor, width: 2),
+                  )
+                : null,
+          ),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: selectedTitle == title ? secondayColor : Colors.white,
+                fontSize: isSmallScreen ? 12 : 16),
+          ),
+        );
+      },
     );
   }
 }
