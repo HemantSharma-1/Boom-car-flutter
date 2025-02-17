@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:boom_car/pages/host/under_verification_screen.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Step6 extends StatefulWidget {
   const Step6({super.key});
@@ -10,6 +12,69 @@ class Step6 extends StatefulWidget {
 }
 
 class _Step6State extends State<Step6> {
+  File? _coverImage;
+  final ImagePicker _picker = ImagePicker();
+  int exteriorLimit = 5;
+  final List<File> _selectedExternalImages = [];
+  final List<File> _selectedExteriorWithLicensePlate = [];
+  final List<File> _selectedInteriorImages = [];
+
+  Future<void> uploadImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _coverImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> uploadExteriorImage() async {
+    final List<XFile>? pickedFiles = await _picker.pickMultiImage(
+      limit: 5,
+    );
+
+    if (pickedFiles != null) {
+      setState(() {
+        exteriorLimit -= _selectedExternalImages.length;
+        _selectedExternalImages.addAll(
+          pickedFiles.map((file) => File(file.path)),
+        );
+      });
+    }
+  }
+
+  Future<void> uploadInteriorImage() async {
+    final List<XFile>? pickedFiles = await _picker.pickMultiImage(
+      limit: 5,
+    );
+
+    if (pickedFiles != null) {
+      setState(() {
+        exteriorLimit -= _selectedInteriorImages.length;
+        _selectedInteriorImages.addAll(
+          pickedFiles.map((file) => File(file.path)),
+        );
+      });
+    }
+  }
+
+  Future<void> uploadExteriorImageWithLicense() async {
+    final List<XFile>? pickedFiles = await _picker.pickMultiImage(
+      limit: 5,
+    );
+
+    if (pickedFiles != null) {
+      setState(() {
+        exteriorLimit -= _selectedExteriorWithLicensePlate.length;
+        _selectedExteriorWithLicensePlate.addAll(
+          pickedFiles.map((file) => File(file.path)),
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,31 +135,47 @@ class _Step6State extends State<Step6> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 135,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: bottomSheetColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_circle,
-                      color: secondayColor,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Upload Media",
-                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: secondayColor),
-                    ),
-                  ],
+              GestureDetector(
+                onTap: uploadImage,
+                child: Container(
+                  height: 135,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: bottomSheetColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: _coverImage == null
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_circle,
+                              color: secondayColor,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Upload Media",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: secondayColor),
+                            ),
+                          ],
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.file(
+                            _coverImage!,
+                            height: 210,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                 ),
               ),
               SizedBox(
@@ -110,30 +191,65 @@ class _Step6State extends State<Step6> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 120,
-                width: 180,
-                decoration: BoxDecoration(
-                  color: bottomSheetColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    Icon(
-                      Icons.add_circle,
-                      color: secondayColor,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Upload Media",
-                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: secondayColor),
-                    ),
+                    if (_selectedExternalImages.isNotEmpty)
+                      for (var image in _selectedExternalImages)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 120,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: bottomSheetColor,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                image,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                    if (_selectedExternalImages.length < 5)
+                      GestureDetector(
+                        onTap: uploadExteriorImage,
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          height: 120,
+                          width: 180,
+                          decoration: BoxDecoration(
+                            color: bottomSheetColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_circle,
+                                color: secondayColor,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Upload Media",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: secondayColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -150,30 +266,64 @@ class _Step6State extends State<Step6> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 120,
-                width: 180,
-                decoration: BoxDecoration(
-                  color: bottomSheetColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    Icon(
-                      Icons.add_circle,
-                      color: secondayColor,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Upload Media",
-                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: secondayColor),
-                    ),
+                    if (_selectedInteriorImages.isNotEmpty)
+                      for (var image in _selectedInteriorImages)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 120,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: bottomSheetColor,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                image,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                    if (_selectedInteriorImages.length < 5)
+                      GestureDetector(
+                        onTap: uploadInteriorImage,
+                        child: Container(
+                          height: 120,
+                          width: 180,
+                          decoration: BoxDecoration(
+                            color: bottomSheetColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_circle,
+                                color: secondayColor,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Upload Media",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: secondayColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -181,7 +331,7 @@ class _Step6State extends State<Step6> {
                 height: 20,
               ),
               Text(
-                'Exterior  Images (With License plate',
+                'Exterior  Images (With License plate)',
                 style: Theme.of(context)
                     .textTheme
                     .displayLarge!
@@ -190,30 +340,64 @@ class _Step6State extends State<Step6> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 120,
-                width: 180,
-                decoration: BoxDecoration(
-                  color: bottomSheetColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    Icon(
-                      Icons.add_circle,
-                      color: secondayColor,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Upload Media",
-                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: secondayColor),
-                    ),
+                    if (_selectedExteriorWithLicensePlate.isNotEmpty)
+                      for (var image in _selectedExteriorWithLicensePlate)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            height: 120,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: bottomSheetColor,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                image,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                    if (_selectedExteriorWithLicensePlate.length < 5)
+                      GestureDetector(
+                        onTap: uploadExteriorImageWithLicense,
+                        child: Container(
+                          height: 120,
+                          width: 180,
+                          decoration: BoxDecoration(
+                            color: bottomSheetColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_circle,
+                                color: secondayColor,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Upload Media",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge!
+                                    .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: secondayColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

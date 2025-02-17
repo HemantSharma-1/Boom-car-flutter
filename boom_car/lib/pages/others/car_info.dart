@@ -5,8 +5,11 @@ import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CarInformation extends StatefulWidget {
-  const CarInformation({super.key, required this.id});
+  const CarInformation({super.key, required this.id, required this.carName, required this.endDate, required this.startDate});
   final String id;
+  final String carName;
+  final String startDate;
+  final String endDate;
   @override
   State<CarInformation> createState() => _CarInformationState();
 }
@@ -51,14 +54,14 @@ class _CarInformationState extends State<CarInformation> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Mahindra Scorpio N 2023',
+                widget.carName,
                 style: Theme.of(context)
                     .textTheme
                     .displaySmall!
                     .copyWith(color: Colors.white, fontSize: 14),
               ),
               Text(
-                '26 Jan, 7PM - 27 Jan. 8AM',
+                '${widget.startDate}-${widget.endDate}',
                 style: Theme.of(context).textTheme.displaySmall,
               )
             ],
@@ -973,9 +976,7 @@ class ScrollableTitle extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenHeight = MediaQuery.of(context).size.height;
-        print(screenHeight);
         final isSmallScreen = screenHeight < 600;
-        print(isSmallScreen);
         return Container(
           padding: EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(

@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:boom_car/pages/host/step_2.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Step1 extends StatefulWidget {
   const Step1({super.key});
@@ -12,11 +14,31 @@ class Step1 extends StatefulWidget {
 
 class _Step1State extends State<Step1> {
   bool isImageUploaded = false;
+  File? _image;
 
   Future<void> uploadImage() async {
-    setState(() {
-      isImageUploaded = true;
-    });
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        isImageUploaded = true;
+      });
+    }
+  }
+
+  // Function to pick an image from the gallery
+  Future<void> pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        isImageUploaded = true;
+      });
+    }
   }
 
   @override
@@ -79,45 +101,50 @@ class _Step1State extends State<Step1> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        DottedBorder(
-                          borderType: BorderType.RRect,
-                          strokeWidth: 1,
-                          dashPattern: [6],
-                          radius: Radius.circular(16),
-                          color: Colors.white,
-                          child: Container(
-                            height: 125,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: bottomSheetColor,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset('assets/icons/ic_uploader.png'),
-                                Text(
-                                  'Upload Media',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge!
-                                      .copyWith(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: secondayColor),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'choose files from Gallery',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge!
-                                      .copyWith(
-                                        fontSize: 14,
-                                      ),
-                                ),
-                              ],
+                        GestureDetector(
+                          onTap: () {
+                            pickImage();
+                          },
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            strokeWidth: 1,
+                            dashPattern: [6],
+                            radius: Radius.circular(16),
+                            color: Colors.white,
+                            child: Container(
+                              height: 125,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: bottomSheetColor,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                children: [
+                                  Image.asset('assets/icons/ic_uploader.png'),
+                                  Text(
+                                    'Upload Media',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge!
+                                        .copyWith(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: secondayColor),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'choose files from Gallery',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge!
+                                        .copyWith(
+                                          fontSize: 14,
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -224,8 +251,8 @@ class _Step1State extends State<Step1> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
-                                child: Image.asset(
-                                  'assets/images/img_register.png',
+                                child: Image.file(
+                                  _image!,
                                   height: 210,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -250,15 +277,14 @@ class _Step1State extends State<Step1> {
                                         Icons.check_circle_outline,
                                         color: Colors.black,
                                       ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
+                                      SizedBox(width: 10),
                                       Text(
                                         'RC successfully uploaded',
                                         style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ],
                                   ),

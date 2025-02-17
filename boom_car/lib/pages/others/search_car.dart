@@ -240,6 +240,10 @@ class _SearchCarsState extends State<SearchCars>
                       if (snapshot.hasData) {
                         return WithoutDriver(
                           carListing: carListingWithoutDriver,
+                          endDate:
+                              DateFormat('dd MMM, ha').format(widget.startDate),
+                          startDate:
+                              DateFormat('dd MMM, ha').format(widget.endDate),
                         );
                       } else if (snapshot.hasError) {
                         return Center(
@@ -260,6 +264,10 @@ class _SearchCarsState extends State<SearchCars>
                       if (snapshot.hasData) {
                         return WithDriver(
                           carListing: carListingWithDriver,
+                          endDate:
+                              DateFormat('dd MMM, ha').format(widget.startDate),
+                          startDate:
+                              DateFormat('dd MMM, ha').format(widget.endDate),
                         );
                       } else if (snapshot.hasError) {
                         return Center(
@@ -285,8 +293,14 @@ class _SearchCarsState extends State<SearchCars>
 }
 
 class WithDriver extends StatelessWidget {
-  const WithDriver({super.key, required this.carListing});
+  const WithDriver(
+      {super.key,
+      required this.carListing,
+      required this.endDate,
+      required this.startDate});
   final List<CarListing> carListing;
+  final String startDate;
+  final String endDate;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -297,6 +311,10 @@ class WithDriver extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => CarInformation(
               id: carListing[index].id!,
+              carName:
+                  '${carListing[index].car!.brandName} ${carListing[index].car!.model} ${carListing[index].car!.year}',
+              endDate: startDate,
+              startDate: endDate,
             ),
           ),
         ),
@@ -458,8 +476,14 @@ class Cars extends StatelessWidget {
 }
 
 class WithoutDriver extends StatelessWidget {
-  const WithoutDriver({super.key, required this.carListing});
+  const WithoutDriver(
+      {super.key,
+      required this.carListing,
+      required this.endDate,
+      required this.startDate});
   final List<CarListing> carListing;
+  final String startDate;
+  final String endDate;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -470,6 +494,10 @@ class WithoutDriver extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => CarInformation(
               id: carListing[index].id!,
+              carName:
+                  '${carListing[index].car!.brandName} ${carListing[index].car!.model} ${carListing[index].car!.year}',
+              endDate: startDate,
+              startDate: endDate,
             ),
           ),
         ),

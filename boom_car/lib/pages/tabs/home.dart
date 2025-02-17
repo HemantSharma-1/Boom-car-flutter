@@ -162,7 +162,6 @@ class _BookRideState extends State<BookRide> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 380,
       width: double.infinity,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -241,7 +240,6 @@ class _BookRideState extends State<BookRide> {
                     }
                   },
                   child: Container(
-                    height: 56,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -262,7 +260,7 @@ class _BookRideState extends State<BookRide> {
                 ),
               ),
               SizedBox(
-                width: 30,
+                width: 20,
               ),
               Expanded(
                 child: GestureDetector(
@@ -294,7 +292,6 @@ class _BookRideState extends State<BookRide> {
                     }
                   },
                   child: Container(
-                    height: 56,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     decoration: BoxDecoration(
                       color: Colors.black,
