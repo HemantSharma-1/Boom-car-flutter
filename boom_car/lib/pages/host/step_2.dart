@@ -1,7 +1,6 @@
 import 'package:boom_car/pages/host/step_3.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:searchfield/searchfield.dart';
 
 class Step2 extends StatefulWidget {
   const Step2({super.key});
