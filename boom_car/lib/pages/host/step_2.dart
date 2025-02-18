@@ -1,6 +1,7 @@
 import 'package:boom_car/pages/host/step_3.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:searchfield/searchfield.dart';
 
 class Step2 extends StatefulWidget {
   const Step2({super.key});
@@ -10,6 +11,51 @@ class Step2 extends StatefulWidget {
 }
 
 class _Step2State extends State<Step2> {
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  final List<String> carBrands = [
+    "Toyota",
+    "Honda",
+    "Ford",
+    "BMW",
+    "Mercedes",
+    "Nissan",
+    "Tesla",
+    "Audi",
+    "Chevrolet",
+    "Hyundai"
+  ];
+  List<String> filteredSuggestions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      _updateSuggestions();
+    });
+  }
+
+  void _updateSuggestions() {
+    String query = _controller.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        filteredSuggestions = [];
+      } else {
+        filteredSuggestions = carBrands
+            .where((brand) => brand.toLowerCase().contains(query))
+            .toList();
+      }
+    });
+  }
+
+  void _selectSuggestion(String suggestion) {
+    _controller.text = suggestion;
+    setState(() {
+      filteredSuggestions = [];
+    });
+    _focusNode.unfocus(); // Hide the keyboard
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,23 +105,57 @@ class _Step2State extends State<Step2> {
               SizedBox(
                 height: 40,
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                    fillColor: bottomSheetColor,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: secondayColor,
-                    ),
-                    hintText: "Select Car"),
+              Stack(
+                children: [
+                  Column(
+                    children: [
+                      TextFormField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        decoration: InputDecoration(
+                          fillColor: bottomSheetColor,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: secondayColor,
+                          ),
+                          hintText: "Select Car",
+                        ),
+                      ),
+                      if (filteredSuggestions.isNotEmpty)
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          constraints: BoxConstraints(maxHeight: 200),
+                          decoration: BoxDecoration(
+                            color: bottomSheetColor,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: filteredSuggestions.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(filteredSuggestions[index]),
+                                onTap: () => _selectSuggestion(
+                                    filteredSuggestions[index]),
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(
                 height: 15,
