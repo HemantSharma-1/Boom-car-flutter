@@ -3,8 +3,18 @@ import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class Step5 extends StatefulWidget {
-  const Step5({super.key});
-
+  const Step5(
+      {super.key,
+      required this.ownerName,
+      required this.registrationNumber,
+      required this.chasiNumber,
+      required this.engineNumber,
+      required this.type});
+  final String ownerName;
+  final String registrationNumber;
+  final String chasiNumber;
+  final String engineNumber;
+  final String type;
   @override
   State<Step5> createState() => _Step5State();
 }
@@ -20,6 +30,7 @@ class _Step5State extends State<Step5> {
   int selectedIndex = 3; // Default selected index (5 Hour)
   int selectedIndex1 = 1;
   int selectedIndex2 = 2;
+  bool nightTimeBooking = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,12 +77,28 @@ class _Step5State extends State<Step5> {
               SizedBox(
                 height: 30,
               ),
-              Text(
-                'Night Time Booking',
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(fontSize: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Night Time Booking',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayLarge!
+                        .copyWith(fontSize: 18),
+                  ),
+                  Switch(
+                    value: nightTimeBooking,
+                    onChanged: (val) {
+                      setState(() {
+                        nightTimeBooking = val;
+                      });
+                    },
+                    trackColor: WidgetStateProperty.all(bottomSheetColor),
+                    thumbColor: WidgetStateProperty.all(secondayColor),
+                    activeThumbImage: AssetImage('assets/icons/ic_moon.png'),
+                  )
+                ],
               ),
               SizedBox(
                 height: 5,
@@ -305,7 +332,14 @@ class _Step5State extends State<Step5> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Step6(),
+                          builder: (context) => Step6(
+                            interminimumBookingDuration:
+                                options[selectedIndex1],
+                            maximumBookingDuration:
+                                durationOptions[selectedIndex2],
+                            minimumBookingDuration: options[selectedIndex],
+                            nightTimeBooking: nightTimeBooking,
+                          ),
                         ));
                   },
                   child: Text(

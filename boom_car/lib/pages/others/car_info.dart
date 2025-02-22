@@ -2,10 +2,16 @@ import 'package:boom_car/pages/others/reviews.dart';
 import 'package:boom_car/services/car_api/car_info.dart';
 import 'package:boom_car/services/models/car_information.dart';
 import 'package:boom_car/utils/colors.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 
 class CarInformation extends StatefulWidget {
-  const CarInformation({super.key, required this.id, required this.carName, required this.endDate, required this.startDate});
+  const CarInformation(
+      {super.key,
+      required this.id,
+      required this.carName,
+      required this.endDate,
+      required this.startDate});
   final String id;
   final String carName;
   final String startDate;
@@ -156,6 +162,7 @@ class _CarInformationState extends State<CarInformation> {
                               "${carInformation!.car!.brandName!} ${carInformation!.car!.model} ${carInformation!.car!.year}",
                           name: carInformation!.hostedBy!.name!,
                           trips: carInformation!.totalTripsCompleted.toString(),
+                          images: carInformation!.carImages!,
                         ),
                         SizedBox(
                           height: 10,
@@ -838,17 +845,26 @@ class RatingReviewWidget extends StatelessWidget {
   }
 }
 
-class CarContainer extends StatelessWidget {
+class CarContainer extends StatefulWidget {
   const CarContainer(
       {super.key,
       required this.carInformation,
       required this.carName,
       required this.name,
-      required this.trips});
+      required this.trips,
+      required this.images});
   final String name;
   final String carName;
   final String carInformation;
   final String trips;
+  final List<CarImage> images;
+  @override
+  State<CarContainer> createState() => _CarContainerState();
+}
+
+class _CarContainerState extends State<CarContainer> {
+  CarouselSliderController buttonCarouselController =
+      CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -891,13 +907,13 @@ class CarContainer extends StatelessWidget {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Hosted By $name',
+                              Text('Hosted By ${widget.name}',
                                   style:
                                       Theme.of(context).textTheme.displaySmall)
                             ],
                           ),
                           Text(
-                            carName,
+                            widget.carName,
                             style: Theme.of(context)
                                 .textTheme
                                 .displayLarge!
@@ -905,7 +921,7 @@ class CarContainer extends StatelessWidget {
                                     fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            carInformation,
+                            widget.carInformation,
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                         ],
@@ -922,7 +938,7 @@ class CarContainer extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '$trips Trips',
+                          '${widget.trips} Trips',
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -937,6 +953,7 @@ class CarContainer extends StatelessWidget {
           ),
           Expanded(
             child: Container(
+              width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15),
@@ -951,11 +968,18 @@ class CarContainer extends StatelessWidget {
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15),
                 ),
-                child: Image.asset(
-                  'assets/images/img_car_interior_raw.png',
-                  width: double.infinity,
-                  fit: BoxFit
-                      .cover, // Ensures the image fills the container properly
+                child: CarouselSlider(
+                  options: CarouselOptions(viewportFraction: 1),
+                  controller: buttonCarouselController,
+                  items: [
+                    for (var image in widget.images)
+                      Image.network(
+                        image.image!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                  ],
                 ),
               ),
             ),

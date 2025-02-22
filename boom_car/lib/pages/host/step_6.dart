@@ -5,7 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Step6 extends StatefulWidget {
-  const Step6({super.key});
+  const Step6(
+      {super.key,
+      required this.nightTimeBooking,
+      required this.minimumBookingDuration,
+      required this.interminimumBookingDuration,
+      required this.maximumBookingDuration});
+  final bool nightTimeBooking;
+  final String minimumBookingDuration;
+  final String interminimumBookingDuration;
+  final String maximumBookingDuration;
 
   @override
   State<Step6> createState() => _Step6State();

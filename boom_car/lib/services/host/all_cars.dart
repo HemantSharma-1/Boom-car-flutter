@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:boom_car/config/config.dart';
-import 'package:boom_car/services/models/car_information.dart';
+import 'package:boom_car/services/models/car_list.dart';
 import 'package:http/http.dart' as http;
 
-class CarInformationService {
-  Future carInformation({
-    required String id,
-  }) async {
+class CarListHost {
+  Future carListHost() async {
     try {
       final uri = Uri.parse('$baseUrl/car/all');
       final response = await http.get(
@@ -16,7 +14,7 @@ class CarInformationService {
       );
 
       if (response.statusCode == 200) {
-        final json = carInformationModelFromMap(response.body);
+        final json = carIListModelFromMap(response.body);
         log(response.body);
         return json;
       } else {
