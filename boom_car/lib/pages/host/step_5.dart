@@ -3,18 +3,28 @@ import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class Step5 extends StatefulWidget {
-  const Step5(
-      {super.key,
-      required this.ownerName,
-      required this.registrationNumber,
-      required this.chasiNumber,
-      required this.engineNumber,
-      required this.type});
+  const Step5({
+    super.key,
+    required this.ownerName,
+    required this.registrationNumber,
+    required this.chasiNumber,
+    required this.engineNumber,
+    required this.type,
+    required this.carId,
+    required this.city,
+    required this.startDate,
+    required this.endDate,
+  });
+  final String carId;
+  final String city;
+  final String startDate;
+  final String endDate;
   final String ownerName;
   final String registrationNumber;
   final String chasiNumber;
   final String engineNumber;
   final String type;
+
   @override
   State<Step5> createState() => _Step5State();
 }
@@ -333,6 +343,15 @@ class _Step5State extends State<Step5> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Step6(
+                            carId: widget.carId,
+                            chasiNumber: widget.chasiNumber,
+                            city: widget.city,
+                            endDate: widget.endDate,
+                            engineNumber: widget.engineNumber,
+                            ownerName: widget.ownerName,
+                            registrationNumber: widget.registrationNumber,
+                            startDate: widget.startDate,
+                            type: widget.type,
                             interminimumBookingDuration:
                                 options[selectedIndex1],
                             maximumBookingDuration:

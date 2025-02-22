@@ -229,6 +229,10 @@ class _Step3State extends State<Step3> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => Step5(
+                                    carId: widget.carId,
+                                    city: widget.city,
+                                    endDate: widget.endDate,
+                                    startDate: widget.startDate,
                                     chasiNumber: chasiNumberCntrl.text,
                                     engineNumber: engineNumberCntrl.text,
                                     ownerName: ownerNameCntrl.text,

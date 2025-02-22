@@ -252,6 +252,10 @@ class _Step4State extends State<Step4> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Step5(
+                              carId: widget.carId,
+                              city: widget.city,
+                              endDate: widget.endDate,
+                              startDate: widget.startDate,
                               chasiNumber: widget.chasiNumber,
                               engineNumber: widget.engineNumber,
                               ownerName: widget.ownerName,

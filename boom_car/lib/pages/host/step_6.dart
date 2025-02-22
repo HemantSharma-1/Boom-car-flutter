@@ -1,20 +1,40 @@
 import 'dart:io';
 import 'package:boom_car/pages/host/under_verification_screen.dart';
+import 'package:boom_car/services/car_api/add_car.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Step6 extends StatefulWidget {
   const Step6(
       {super.key,
+      required this.carId,
+      required this.city,
+      required this.endDate,
+      required this.startDate,
+      required this.chasiNumber,
+      required this.engineNumber,
+      required this.ownerName,
+      required this.registrationNumber,
+      required this.type,
       required this.nightTimeBooking,
       required this.minimumBookingDuration,
       required this.interminimumBookingDuration,
       required this.maximumBookingDuration});
+  final String carId;
+  final String city;
+  final String startDate;
+  final String endDate;
   final bool nightTimeBooking;
   final String minimumBookingDuration;
   final String interminimumBookingDuration;
   final String maximumBookingDuration;
+  final String ownerName;
+  final String registrationNumber;
+  final String chasiNumber;
+  final String engineNumber;
+  final String type;
 
   @override
   State<Step6> createState() => _Step6State();
@@ -82,6 +102,33 @@ class _Step6State extends State<Step6> {
         );
       });
     }
+  }
+
+  Future<void> uploadHostData() async {
+    final storage = FlutterSecureStorage();
+    // Read value
+    final token = await storage.read(key: 'authToken');
+    await AddCarApi().addCarApi(
+        token: token!,
+        carId: widget.carId,
+        city: widget.city,
+        location: widget.city,
+        startDate: widget.startDate,
+        endDate: widget.endDate,
+        ownerName: widget.ownerName,
+        registerationNumber: widget.registrationNumber,
+        chasiNumber: widget.chasiNumber,
+        engineNumber: widget.engineNumber,
+        type: widget.type,
+        nightbookAvailability: widget.nightTimeBooking,
+        minimumBookingDuration: widget.minimumBookingDuration,
+        interBookingDuration: widget.interminimumBookingDuration,
+        maximumBookingDuration: widget.maximumBookingDuration,
+        rcImage: _coverImage!,
+        coverImage: _coverImage!,
+        exteriorImages: _selectedExternalImages,
+        interiorImages: _selectedInteriorImages,
+        exteriorWithLicensePlateImages: _selectedExteriorWithLicensePlate);
   }
 
   @override
@@ -428,11 +475,12 @@ class _Step6State extends State<Step6> {
                         Size(double.infinity, 50)), // Set max size
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UnderVerificationScreen(),
-                        ));
+                    uploadHostData();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => UnderVerificationScreen(),
+                    //     ));
                   },
                   child: Text(
                     'VERIFY',
