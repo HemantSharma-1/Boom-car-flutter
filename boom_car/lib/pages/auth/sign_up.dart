@@ -1,9 +1,11 @@
 import 'package:boom_car/pages/auth/login.dart';
 import 'package:boom_car/pages/auth/phone_number.dart';
+import 'package:boom_car/services/auth/googe_sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -17,6 +19,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  GoogleSignIn? _googleSignIn;
 
   @override
   void dispose() {
@@ -24,6 +27,21 @@ class _SignUpState extends State<SignUp> {
     passwordCtrl.dispose();
     emailCtrl.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    const List<String> scopes = <String>[
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ];
+
+    _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      // clientId: 'your-client_id.apps.googleusercontent.com',
+      scopes: scopes,
+    );
+    super.initState();
   }
 
   @override
@@ -185,6 +203,7 @@ class _SignUpState extends State<SignUp> {
                                   email: emailCtrl.text,
                                   password: passwordCtrl.text,
                                   userName: userNameCtrl.text,
+                                  googleSignIn: false,
                                 ),
                               ),
                             );
@@ -220,7 +239,26 @@ class _SignUpState extends State<SignUp> {
                     Spacer(),
                     Center(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          try {
+                            final userData = await _googleSignIn!.signIn();
+                            print(userData);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PhoneNumberScreen(
+                                  email: userData!.email,
+                                  password: '',
+                                  userName: userData.displayName!,
+                                  googleSignIn: true,
+                                  profileImage: userData.photoUrl!,
+                                ),
+                              ),
+                            );
+                          } catch (error) {
+                            print(error);
+                          }
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

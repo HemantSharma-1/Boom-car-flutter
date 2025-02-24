@@ -155,8 +155,8 @@ class BookRide extends StatefulWidget {
 
 class _BookRideState extends State<BookRide> {
   final TextEditingController cityCntrl = TextEditingController(text: "Mumbai");
-  late DateTime startDate = DateTime(2025, 1, 21);
-  late DateTime endDate = DateTime(2025, 1, 25);
+  late DateTime startDate = DateTime.now();
+  late DateTime endDate = DateTime.now();
   bool value = false;
 
   @override

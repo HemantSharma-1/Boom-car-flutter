@@ -1,4 +1,5 @@
 import 'package:boom_car/pages/auth/verify_otp.dart';
+import 'package:boom_car/services/auth/googe_sign_up.dart';
 import 'package:boom_car/services/auth/sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/common_loader.dart';
@@ -12,10 +13,14 @@ class PhoneNumberScreen extends StatefulWidget {
       {super.key,
       required this.email,
       required this.password,
-      required this.userName});
+      required this.userName,
+      required this.googleSignIn,
+      this.profileImage});
   final String userName;
   final String email;
   final String password;
+  final bool googleSignIn;
+  final String? profileImage;
 
   @override
   State<PhoneNumberScreen> createState() => _PhoneNumberScreenState();
@@ -39,11 +44,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           _errorMessage = null; // Reset previous errors
         });
         showLoaderDialog(context);
-        final response = await UserSignUp().userSignUp(
-            email: widget.email,
-            password: widget.password,
-            name: widget.password,
-            phno: phoneCtrl.text);
+        final response = !widget.googleSignIn
+            ? await UserSignUp().userSignUp(
+                email: widget.email,
+                password: widget.password,
+                name: widget.userName,
+                phno: phoneCtrl.text)
+            : await UserGoogleSignUp().userGoogleSignUp(
+                email: widget.email,
+                name: widget.userName,
+                profileImage: widget.profileImage!,
+                phno: phoneCtrl.text);
         Navigator.pop(context);
         if (response["success"] && mounted) {
           //Create storage

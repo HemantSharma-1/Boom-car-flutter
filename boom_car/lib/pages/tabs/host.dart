@@ -41,7 +41,7 @@ class _HostState extends State<Host> {
                     color: bottomSheetColor,
                     borderRadius: BorderRadius.circular(16)),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Container(
@@ -89,23 +89,26 @@ class _HostState extends State<Host> {
                       SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: secondayColor,
-                          ),
-                          Expanded(child: Text('100% assurance policy')),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Icon(
-                            Icons.check_circle,
-                            color: secondayColor,
-                          ),
-                          Expanded(child: Text('Enhanced Protection')),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: secondayColor,
+                            ),
+                            Expanded(child: Text('100% assurance policy')),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: secondayColor,
+                            ),
+                            Expanded(child: Text('Enhanced Protection')),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 20,

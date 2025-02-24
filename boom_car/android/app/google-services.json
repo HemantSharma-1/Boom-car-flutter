@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "709448946753",
+    "project_id": "boomcar-56b4a",
+    "storage_bucket": "boomcar-56b4a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709448946753:android:977c942c0b855c44ad22c0",
+        "android_client_info": {
+          "package_name": "com.boomcar.boomcar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709448946753-q1ec7olh4ip202ql2ug61jk5fecjuo7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomcar.boomcar",
+            "certificate_hash": "95e86737e536a8b98c6ae4c46279efb295e61349"
+          }
+        },
+        {
+          "client_id": "709448946753-romkrb9pok5sg1a2ab7pj9r423iivthk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwTa6bA6CNBkGwsPC3g7ogNcn2OYN4DSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709448946753-romkrb9pok5sg1a2ab7pj9r423iivthk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

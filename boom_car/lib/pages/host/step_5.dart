@@ -153,7 +153,7 @@ class _Step5State extends State<Step5> {
                     },
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 15),
                       decoration: BoxDecoration(
                         color: bottomSheetColor, // Background color
                         borderRadius:
@@ -222,7 +222,7 @@ class _Step5State extends State<Step5> {
                     },
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 15),
                       decoration: BoxDecoration(
                         color: bottomSheetColor, // Background color
                         borderRadius:
@@ -291,7 +291,7 @@ class _Step5State extends State<Step5> {
                     },
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 15),
                       decoration: BoxDecoration(
                         color: bottomSheetColor, // Background color
                         borderRadius:
