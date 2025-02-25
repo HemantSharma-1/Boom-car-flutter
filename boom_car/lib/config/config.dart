@@ -1,1 +1,1 @@
-const baseUrl = "https://boom-car-backend.vercel.app/api/v1";
+const baseUrl = "https://api.boomcarindia.com/api/v1/";

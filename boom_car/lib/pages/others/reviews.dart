@@ -1,10 +1,11 @@
 import 'package:boom_car/pages/others/car_info.dart';
+import 'package:boom_car/services/models/car_review.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key});
-
+  const ReviewPage({super.key, required this.carReviewData});
+  final List<CarReviewModel>? carReviewData;
   @override
   State<ReviewPage> createState() => _ReviewPageState();
 }
@@ -28,10 +29,14 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: 8,
+        itemCount: widget.carReviewData!.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Review(),
+          child: Review(
+            name: widget.carReviewData![index].user!.name!,
+            rating: widget.carReviewData![index].rating.toString(),
+            review: widget.carReviewData![index].review.toString(),
+          ),
         ),
       ),
     );

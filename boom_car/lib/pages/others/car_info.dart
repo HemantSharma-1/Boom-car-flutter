@@ -1,9 +1,12 @@
 import 'package:boom_car/pages/others/reviews.dart';
 import 'package:boom_car/services/car_api/car_info.dart';
+import 'package:boom_car/services/car_api/car_review.dart';
 import 'package:boom_car/services/models/car_information.dart';
+import 'package:boom_car/services/models/car_review.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CarInformation extends StatefulWidget {
   const CarInformation(
@@ -28,12 +31,22 @@ class _CarInformationState extends State<CarInformation> {
   final GlobalKey _locationKey = GlobalKey();
   final GlobalKey _featuresKey = GlobalKey();
   CarInformationModel? carInformation;
-
+  List<CarReviewModel>? carReviewData;
   String selectedTitle = '';
+  Future<String>? carInfo;
+  Future<String>? reviewData;
 
   Future<String> getCarInfo() async {
     carInformation =
         await CarInformationService().carInformation(id: widget.id);
+    return '';
+  }
+
+  Future<String> getCarReview() async {
+    final storage = FlutterSecureStorage();
+    // Read value
+    final token = await storage.read(key: 'authToken');
+    carReviewData = await CarReview().carReview(id: widget.id, token: token!);
     return '';
   }
 
@@ -47,6 +60,13 @@ class _CarInformationState extends State<CarInformation> {
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    carInfo = getCarInfo();
+    reviewData = getCarReview();
   }
 
   @override
@@ -98,7 +118,7 @@ class _CarInformationState extends State<CarInformation> {
           child: SingleChildScrollView(
             controller: _scrollController,
             child: FutureBuilder<String>(
-                future: getCarInfo(),
+                future: carInfo,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
@@ -114,7 +134,7 @@ class _CarInformationState extends State<CarInformation> {
                             ),
                             Expanded(
                               child: Text(
-                                carInformation!.carLocation!,
+                                carInformation!.carLocation!.location!,
                                 style: Theme.of(context)
                                     .textTheme
                                     .displaySmall!
@@ -235,13 +255,37 @@ class _CarInformationState extends State<CarInformation> {
                         SizedBox(
                           height: 30,
                         ),
-                        Review(),
-                        SizedBox(
-                          height: 20,
+                        FutureBuilder<Object>(
+                          future: reviewData,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                shrinkWrap:
+                                    true, // Ensures the ListView takes only the space it needs
+                                physics:
+                                    NeverScrollableScrollPhysics(), // Prevents the ListView from scrolling
+                                itemCount: carReviewData!.length,
+                                itemBuilder: (context, index) {
+                                  return Review(
+                                    name: carReviewData![index].user!.name!,
+                                    rating:
+                                        carReviewData![index].rating.toString(),
+                                    review:
+                                        carReviewData![index].review.toString(),
+                                  );
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Something went wrong');
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         ),
-                        Review(),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Center(
                           child: ElevatedButton(
@@ -254,10 +298,13 @@ class _CarInformationState extends State<CarInformation> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ReviewPage(),
+                                    builder: (context) => ReviewPage(
+                                      carReviewData: carReviewData,
+                                    ),
                                   ));
                             },
-                            child: Text('View All 16 reviews'),
+                            child: Text(
+                                'View All ${carReviewData!.length} reviews'),
                           ),
                         ),
                         SizedBox(
@@ -266,7 +313,7 @@ class _CarInformationState extends State<CarInformation> {
                         Container(
                             key: _locationKey,
                             child: CarLocationWidget(
-                              location: carInformation!.carLocation!,
+                              location: carInformation!.carLocation!.location!,
                             )),
                         SizedBox(
                           height: 20,
@@ -590,9 +637,15 @@ class CarLocationWidget extends StatelessWidget {
 }
 
 class Review extends StatelessWidget {
-  const Review({
-    super.key,
-  });
+  const Review(
+      {super.key,
+      required this.name,
+      required this.rating,
+      required this.review});
+
+  final String name;
+  final String rating;
+  final String review;
 
   @override
   Widget build(BuildContext context) {
@@ -600,13 +653,13 @@ class Review extends StatelessWidget {
       final screenHeight = MediaQuery.of(context).size.height;
       final isSmallScreen = screenHeight < 600;
       return Container(
-        height: 140,
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: bottomSheetColor,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -620,7 +673,7 @@ class Review extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Bhushan Kumar",
+                      name,
                       style: Theme.of(context)
                           .textTheme
                           .displayLarge!
@@ -632,7 +685,7 @@ class Review extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text('4.5 out of 5 rating')
+                        Text('$rating out of 5 rating')
                       ],
                     )
                   ],
@@ -642,7 +695,7 @@ class Review extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'The car is an excellent condition.Brand new car with high quality performance.Highly Recommended.”“The car is an excellent condition.Brand new car with high quality performance.',
+                review,
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     color: Colors.white, fontSize: isSmallScreen ? 10 : 12),
               ),
@@ -973,8 +1026,14 @@ class _CarContainerState extends State<CarContainer> {
                   controller: buttonCarouselController,
                   items: [
                     for (var image in widget.images)
-                      Image.network(
-                        image.image!,
+                      // Image.network(
+                      //   image.image!,
+                      //   fit: BoxFit.cover,
+                      //   width: double.infinity,
+                      //   height: double.infinity,
+                      // )
+                      Image.asset(
+                        'assets/images/img_car_interior_raw.png',
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,

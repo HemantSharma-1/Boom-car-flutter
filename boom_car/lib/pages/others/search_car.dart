@@ -128,7 +128,7 @@ class _SearchCarsState extends State<SearchCars>
                 ),
                 Spacer(),
                 Container(
-                  width: 120,
+                  width: 150,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -136,7 +136,7 @@ class _SearchCarsState extends State<SearchCars>
                     color: bottomSheetColor,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
                         children: [
@@ -193,14 +193,14 @@ class _SearchCarsState extends State<SearchCars>
                                 Theme.of(context).inputDecorationTheme.border)
                         .copyWith(
                       prefixIcon: Image.asset('assets/icons/ic_search.png'),
-                      suffixIcon: Icon(
-                        Icons.filter_alt_rounded,
-                        color: secondayColor,
-                      ),
+                      suffixIcon: Image.asset('assets/icons/ic_filter.png'),
                     ),
                   ),
                 ),
-                Icon(Icons.filter_list_sharp),
+                SizedBox(
+                  width: 10,
+                ),
+                Image.asset('assets/icons/ic_desc.png'),
               ],
             ),
             SizedBox(
@@ -213,6 +213,15 @@ class _SearchCarsState extends State<SearchCars>
               dividerColor: Colors.transparent,
               unselectedLabelColor: Colors.white,
               labelStyle: isSmallScreen
+                  ? Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(fontSize: 12)
+                  : Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(fontSize: 15),
+              unselectedLabelStyle: isSmallScreen
                   ? Theme.of(context)
                       .textTheme
                       .displayLarge!
@@ -280,7 +289,6 @@ class _SearchCarsState extends State<SearchCars>
                           ),
                         );
                       }
-                      
                     },
                   ),
                 ],
@@ -369,13 +377,17 @@ class Cars extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              src,
-              fit: BoxFit
-                  .cover, // Ensures the image fills the container properly
-            ),
-          ),
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                'assets/images/img_car_interior_raw.png',
+                fit: BoxFit.cover,
+              )
+              //  Image.network(
+              //   src,
+              //   fit: BoxFit
+              //       .cover, // Ensures the image fills the container properly
+              // ),
+              ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,

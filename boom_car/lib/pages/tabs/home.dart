@@ -251,7 +251,7 @@ class _BookRideState extends State<BookRide> {
                       children: [
                         Text('Start Date'),
                         Text(
-                          DateFormat('MMM dd, yyyy h:mm a').format(startDate),
+                          DateFormat('MMM dd,  h:mm a').format(startDate),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -303,7 +303,7 @@ class _BookRideState extends State<BookRide> {
                       children: [
                         Text('End Date'),
                         Text(
-                          DateFormat('MMM dd, yyyy h:mm a').format(endDate),
+                          DateFormat('MMM dd,  h:mm a').format(endDate),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
