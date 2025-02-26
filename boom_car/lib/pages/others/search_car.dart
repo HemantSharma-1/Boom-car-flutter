@@ -268,7 +268,7 @@ class _SearchCarsState extends State<SearchCars>
                     },
                   ),
                   FutureBuilder<String>(
-                    future: getCarListWithDriver(type: "Self Drive"),
+                    future: getCarListWithDriver(type: "With Driver"),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return WithDriver(
@@ -377,17 +377,13 @@ class Cars extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.asset(
-                'assets/images/img_car_interior_raw.png',
-                fit: BoxFit.cover,
-              )
-              //  Image.network(
-              //   src,
-              //   fit: BoxFit
-              //       .cover, // Ensures the image fills the container properly
-              // ),
-              ),
+            borderRadius: BorderRadius.circular(15),
+            child: Image.network(
+              src,
+              fit: BoxFit
+                  .cover, // Ensures the image fills the container properly
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,

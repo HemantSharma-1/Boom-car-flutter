@@ -65,9 +65,10 @@ class _Step2State extends State<Step2> {
     });
   }
 
-  void _selectSuggestion({required String suggestion, required String carId}) {
+  void _selectSuggestion(
+      {required String suggestion, required String carIdupdate}) {
     _controller.text = suggestion;
-    carId = carId;
+    carId = carIdupdate;
     setState(() {
       filteredSuggestions = [];
     });
@@ -182,7 +183,7 @@ class _Step2State extends State<Step2> {
                                         onTap: () => _selectSuggestion(
                                             suggestion:
                                                 '${filteredSuggestions[index].brandName!} ${filteredSuggestions[index].model}',
-                                            carId:
+                                            carIdupdate:
                                                 filteredSuggestions[index].id!),
                                       );
                                     },
@@ -202,6 +203,7 @@ class _Step2State extends State<Step2> {
                   height: 15,
                 ),
                 TextFormField(
+                  controller: cityCntrl,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(alphaCharacters)
                   ],
@@ -372,6 +374,11 @@ class _Step2State extends State<Step2> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate() && mounted) {
+                        print("data");
+                        print(carId);
+                        print(cityCntrl.text);
+                        print(endDateCntrl.text);
+                        print(startDateCntrl.text);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

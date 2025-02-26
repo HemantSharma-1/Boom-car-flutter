@@ -1026,14 +1026,8 @@ class _CarContainerState extends State<CarContainer> {
                   controller: buttonCarouselController,
                   items: [
                     for (var image in widget.images)
-                      // Image.network(
-                      //   image.image!,
-                      //   fit: BoxFit.cover,
-                      //   width: double.infinity,
-                      //   height: double.infinity,
-                      // )
-                      Image.asset(
-                        'assets/images/img_car_interior_raw.png',
+                      Image.network(
+                        image.image!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,

@@ -73,26 +73,28 @@ class AddCarApi {
       // Add exterior images (assuming multiple files)
       for (var exteriorImage in exteriorImages) {
         request.files.add(await http.MultipartFile.fromPath(
-            'exteriorImages[]', exteriorImage.path));
+            'exteriorImages', exteriorImage.path));
       }
 
       // Add interior images (assuming multiple files)
       for (var interiorImage in interiorImages) {
         request.files.add(await http.MultipartFile.fromPath(
-            'interiorImages[]', interiorImage.path));
+            'interiorImages', interiorImage.path));
       }
 
       for (var exteriorWithLicensePlateImage
           in exteriorWithLicensePlateImages) {
         request.files.add(await http.MultipartFile.fromPath(
-            'exteriorWithLicensePlateImage[]',
+            'exteriorWithLicensePlateImages',
             exteriorWithLicensePlateImage.path));
       }
       print(request.fields);
-      print(request.files[0].contentType);
       print(request.files[0].field);
-      print(request.files[0].filename);
-      print(request.files[0].length);
+      print(request.files[1].field);
+      print(request.files[2].field);
+      print(request.files[3].field);
+      print(request.files[4].field);
+
       // Send the request
       final response = await request.send();
 

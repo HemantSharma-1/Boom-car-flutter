@@ -353,10 +353,11 @@ class _Step5State extends State<Step5> {
                             startDate: widget.startDate,
                             type: widget.type,
                             interminimumBookingDuration:
-                                options[selectedIndex1],
+                                options[selectedIndex1].split(' ')[0],
                             maximumBookingDuration:
-                                durationOptions[selectedIndex2],
-                            minimumBookingDuration: options[selectedIndex],
+                                durationOptions[selectedIndex2].split(' ')[0],
+                            minimumBookingDuration:
+                                options[selectedIndex].split(' ')[0],
                             nightTimeBooking: nightTimeBooking,
                           ),
                         ));
