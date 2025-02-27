@@ -14,7 +14,15 @@ class Step5 extends StatefulWidget {
     required this.city,
     required this.startDate,
     required this.endDate,
+    this.adharCard,
+    this.driverName,
+    this.experience,
+    this.driverProfilePicture
   });
+  final String? driverName;
+  final String? adharCard;
+  final String? experience;
+  final String? driverProfilePicture;
   final String carId;
   final String city;
   final String startDate;

@@ -39,6 +39,7 @@ class _CarInformationState extends State<CarInformation> {
   Future<String> getCarInfo() async {
     carInformation =
         await CarInformationService().carInformation(id: widget.id);
+    print(carInformation!.ratingsAndReviews!.ratings!.values.elementAt(3));
     return '';
   }
 
@@ -251,6 +252,8 @@ class _CarInformationState extends State<CarInformation> {
                                   .toString(),
                               trips: carInformation!.totalTripsCompleted
                                   .toString(),
+                              ratingSegragation:
+                                  carInformation!.ratingsAndReviews!.ratings!,
                             )),
                         SizedBox(
                           height: 30,
@@ -712,11 +715,13 @@ class RatingReviewWidget extends StatelessWidget {
       {super.key,
       required this.rating,
       required this.ratings,
+      required this.ratingSegragation,
       required this.trips});
 
   final String trips;
   final String rating;
   final String ratings;
+  final Map<String, int> ratingSegragation;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -786,7 +791,12 @@ class RatingReviewWidget extends StatelessWidget {
                       Expanded(
                         // Ensures progress bar takes full width
                         child: LinearProgressIndicator(
-                          value: 0.9,
+                          value: ratingSegragation.values.elementAt(4) != 0
+                              ? ratingSegragation.values
+                                      .elementAt(4)
+                                      .toDouble() /
+                                  double.parse(ratings)
+                              : 0,
                           minHeight: 10,
                           backgroundColor: bottomSheetColor,
                           borderRadius: BorderRadius.circular(15),
@@ -809,7 +819,12 @@ class RatingReviewWidget extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: 0.1,
+                          value: ratingSegragation.values.elementAt(3) != 0
+                              ? ratingSegragation.values
+                                      .elementAt(3)
+                                      .toDouble() /
+                                  double.parse(ratings)
+                              : 0,
                           minHeight: 10,
                           backgroundColor: bottomSheetColor,
                           borderRadius: BorderRadius.circular(15),
@@ -832,7 +847,12 @@ class RatingReviewWidget extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: 0.2,
+                          value: ratingSegragation.values.elementAt(2) != 0
+                              ? ratingSegragation.values
+                                      .elementAt(2)
+                                      .toDouble() /
+                                  double.parse(ratings)
+                              : 0,
                           minHeight: 10,
                           backgroundColor: bottomSheetColor,
                           borderRadius: BorderRadius.circular(15),
@@ -855,7 +875,12 @@ class RatingReviewWidget extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: 0.3,
+                          value: ratingSegragation.values.elementAt(1) != 0
+                              ? ratingSegragation.values
+                                      .elementAt(1)
+                                      .toDouble() /
+                                  double.parse(ratings)
+                              : 0,
                           minHeight: 10,
                           backgroundColor: bottomSheetColor,
                           borderRadius: BorderRadius.circular(15),
@@ -878,7 +903,12 @@ class RatingReviewWidget extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: LinearProgressIndicator(
-                          value: 0.4,
+                          value: ratingSegragation.values.elementAt(0) != 0
+                              ? ratingSegragation.values
+                                      .elementAt(0)
+                                      .toDouble() /
+                                  double.parse(ratings)
+                              : 0.0,
                           minHeight: 10,
                           backgroundColor: bottomSheetColor,
                           borderRadius: BorderRadius.circular(15),

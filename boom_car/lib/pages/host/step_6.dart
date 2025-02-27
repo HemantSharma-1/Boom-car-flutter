@@ -21,7 +21,11 @@ class Step6 extends StatefulWidget {
       required this.nightTimeBooking,
       required this.minimumBookingDuration,
       required this.interminimumBookingDuration,
-      required this.maximumBookingDuration});
+      required this.maximumBookingDuration,
+      this.adharCard,
+      this.driverName,
+      this.driverProfilePicture,
+      this.experience});
   final String carId;
   final String city;
   final String startDate;
@@ -35,6 +39,10 @@ class Step6 extends StatefulWidget {
   final String chasiNumber;
   final String engineNumber;
   final String type;
+  final String? driverName;
+  final String? adharCard;
+  final String? experience;
+  final String? driverProfilePicture;
 
   @override
   State<Step6> createState() => _Step6State();
@@ -108,7 +116,7 @@ class _Step6State extends State<Step6> {
     final storage = FlutterSecureStorage();
     // Read value
     final token = await storage.read(key: 'authToken');
-    await AddCarApi().addCarApi(
+    final response = await AddCarApi().addCarApi(
         token: token!,
         carId: widget.carId,
         city: widget.city,
@@ -129,6 +137,14 @@ class _Step6State extends State<Step6> {
         exteriorImages: _selectedExternalImages,
         interiorImages: _selectedInteriorImages,
         exteriorWithLicensePlateImages: _selectedExteriorWithLicensePlate);
+
+    if (response["success"] && mounted) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UnderVerificationScreen(),
+          ));
+    }
   }
 
   @override
@@ -476,11 +492,6 @@ class _Step6State extends State<Step6> {
                   ),
                   onPressed: () {
                     uploadHostData();
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => UnderVerificationScreen(),
-                    //     ));
                   },
                   child: Text(
                     'VERIFY',

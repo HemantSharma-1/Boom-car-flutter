@@ -26,6 +26,10 @@ class AddCarApi {
     required List<File> exteriorImages,
     required List<File> interiorImages,
     required List<File> exteriorWithLicensePlateImages,
+    String? driverName,
+    String? aadhaarNumber,
+    String? experienceYears,
+    File? driverProfilePicture,
   }) async {
     try {
       final uri = Uri.parse('$baseUrl/listing/add');
@@ -55,7 +59,6 @@ class AddCarApi {
       log('RC Image path: ${rcImage.path}');
       log('Cover Image path: ${coverImage.path}');
 
-      // Check if the file exists before adding it to the request
       if (rcImage.existsSync()) {
         request.files
             .add(await http.MultipartFile.fromPath('rcImage', rcImage.path));
@@ -70,13 +73,11 @@ class AddCarApi {
         log("Cover Image file does not exist at path: ${coverImage.path}");
       }
 
-      // Add exterior images (assuming multiple files)
       for (var exteriorImage in exteriorImages) {
         request.files.add(await http.MultipartFile.fromPath(
             'exteriorImages', exteriorImage.path));
       }
 
-      // Add interior images (assuming multiple files)
       for (var interiorImage in interiorImages) {
         request.files.add(await http.MultipartFile.fromPath(
             'interiorImages', interiorImage.path));
@@ -88,17 +89,27 @@ class AddCarApi {
             'exteriorWithLicensePlateImages',
             exteriorWithLicensePlateImage.path));
       }
-      print(request.fields);
-      print(request.files[0].field);
-      print(request.files[1].field);
-      print(request.files[2].field);
-      print(request.files[3].field);
-      print(request.files[4].field);
+
+      // Add driver details only if available
+      if (driverName != null &&
+          aadhaarNumber != null &&
+          experienceYears != null) {
+        Map<String, String> driverDetails = {
+          "driverName": driverName,
+          "aadhaarNumber": aadhaarNumber,
+          "experienceYears": experienceYears,
+        };
+        request.fields['driverDetails'] = jsonEncode(driverDetails);
+      }
+
+      // Add driver profile picture if available
+      if (driverProfilePicture != null && driverProfilePicture.existsSync()) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'driverProfilePicture', driverProfilePicture.path));
+      }
 
       // Send the request
       final response = await request.send();
-
-      // Listen to the response
       final responseBody = await http.Response.fromStream(response);
 
       if (response.statusCode == 200) {
