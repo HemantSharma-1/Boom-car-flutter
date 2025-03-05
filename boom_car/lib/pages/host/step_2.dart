@@ -1,5 +1,6 @@
 import 'package:boom_car/pages/host/step_3.dart';
-import 'package:boom_car/services/host/all_cars.dart';
+import 'package:boom_car/services/api/host/all_cars.dart';
+import 'package:boom_car/services/database/getAllCarList.dart';
 import 'package:boom_car/services/models/car_list.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/validator.dart';
@@ -26,8 +27,8 @@ class _Step2State extends State<Step2> {
   Future<String>? carData;
   List<CarIListModel> filteredSuggestions = [];
   Future<String> getAllcars() async {
-    carList = await CarListHost().carListHost();
-    print('${carList[0].brandName} ${carList[0].model} ${carList[0].variant}');
+    carList = await DatabaseHelper.instance.getCars();
+    //await CarListHost().carListHost();
     return '';
   }
 

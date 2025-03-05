@@ -16,10 +16,6 @@ class _HostState extends State<Host> {
       appBar: AppBar(
         title: Text('Host & Earn'),
         backgroundColor: Colors.transparent,
-        leading: Icon(
-          Icons.arrow_back_ios_new_rounded,
-          color: secondayColor,
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

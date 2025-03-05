@@ -1,5 +1,5 @@
-import 'package:boom_car/services/auth/get_user.dart';
-import 'package:boom_car/services/auth/update_user.dart';
+import 'package:boom_car/services/api/auth/get_user.dart';
+import 'package:boom_car/services/api/auth/update_user.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/common_loader.dart';
 import 'package:flutter/material.dart';

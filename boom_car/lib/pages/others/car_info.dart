@@ -1,6 +1,6 @@
 import 'package:boom_car/pages/others/reviews.dart';
-import 'package:boom_car/services/car_api/car_info.dart';
-import 'package:boom_car/services/car_api/car_review.dart';
+import 'package:boom_car/services/api/car_api/car_info.dart';
+import 'package:boom_car/services/api/car_api/car_review.dart';
 import 'package:boom_car/services/models/car_information.dart';
 import 'package:boom_car/services/models/car_review.dart';
 import 'package:boom_car/utils/colors.dart';

@@ -1,81 +1,98 @@
 import 'dart:io';
-import 'package:boom_car/pages/host/step_2.dart';
-import 'package:boom_car/services/api/host/all_cars.dart';
-import 'package:boom_car/services/database/getAllCarList.dart';
-import 'package:boom_car/services/models/car_list.dart';
+
 import 'package:boom_car/utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Step1 extends StatefulWidget {
-  const Step1({super.key});
+class CarImageScreen extends StatefulWidget {
+  const CarImageScreen({super.key});
 
   @override
-  State<Step1> createState() => _Step1State();
+  State<CarImageScreen> createState() => _CarImageScreenState();
 }
 
-class _Step1State extends State<Step1> {
+class _CarImageScreenState extends State<CarImageScreen> {
   bool isImageUploaded = false;
-  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  final List<File> _image = [];
 
-  Future<void> uploadImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+  Future<void> pickImage() async {
+    final List<XFile>? pickedFiles = await _picker.pickMultiImage(
+      limit: 5,
+    );
 
-    if (pickedFile != null) {
+    if (pickedFiles != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        _image.addAll(
+          pickedFiles.map((file) => File(file.path)),
+        );
         isImageUploaded = true;
       });
     }
   }
 
   // Function to pick an image from the gallery
-  Future<void> pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<void> uploadImage() async {
+    bool continueCapturing = true;
 
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        isImageUploaded = true;
-      });
+    while (continueCapturing) {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.camera);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image.add(File(pickedFile.path));
+        });
+
+        // Ask user if they want to take another photo
+        continueCapturing = await _showCaptureMoreDialog();
+      } else {
+        continueCapturing = false; // Stop capturing if user cancels
+      }
     }
+  }
+
+// Dialog to ask user if they want to take another picture
+  Future<bool> _showCaptureMoreDialog() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Capture Another?"),
+            content: Text("Do you want to take another photo?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("No"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text("Yes"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Upload Car Images",
+            style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                  color: secondayColor,
+                  fontSize: 17,
+                )),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: secondayColor,
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: SizedBox(
-          width: 180,
-          child: Column(
-            children: [
-              Text(
-                'Step 1 of 6',
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              Align(
-                  alignment: Alignment(-0.8, 0),
-                  child: Image.asset('assets/icons/ic_car.png')),
-              LinearProgressIndicator(
-                value: 0.2,
-                minHeight: 3,
-                backgroundColor: bottomSheetColor,
-                valueColor: AlwaysStoppedAnimation<Color>(secondayColor),
-              )
-            ],
-          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Padding(
@@ -84,16 +101,6 @@ class _Step1State extends State<Step1> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Upload Registration Certificate',
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(fontSize: 18),
-              ),
-              SizedBox(
-                height: 20,
-              ),
               Center(
                 child: Image.asset('assets/images/img_step1.png'),
               ),
@@ -157,6 +164,11 @@ class _Step1State extends State<Step1> {
                         Center(
                           child: ElevatedButton(
                             style: ButtonStyle(
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
                               minimumSize: WidgetStateProperty.all(
                                   Size(double.infinity, 50)), // Set min size
                               maximumSize: WidgetStateProperty.all(
@@ -203,7 +215,7 @@ class _Step1State extends State<Step1> {
                             ),
                             Expanded(
                               child: Text(
-                                'Make sure to have clear background with natural light',
+                                'Upload photos of car from 4 different angles',
                                 style: Theme.of(context)
                                     .textTheme
                                     .displayLarge!
@@ -214,88 +226,31 @@ class _Step1State extends State<Step1> {
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.check_circle_rounded,
-                              color: secondayColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Require photos of both front and back sides',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge!
-                                    .copyWith(fontSize: 16),
-                              ),
-                            )
-                          ],
-                        ),
                       ],
                     )
                   : Column(
                       children: [
-                        Container(
-                          height: 210,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.red,
-                          ),
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.file(
-                                  _image!,
-                                  height: 210,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Container(
-                                height: 40,
-                                width: double.infinity,
-                                padding: EdgeInsets.all(8.0),
+                        if (_image.isNotEmpty)
+                          for (var image in _image)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Container(
+                                height: 120,
+                                width: 180,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(16),
-                                    bottomRight: Radius.circular(16),
-                                  ),
-                                  color: Colors.green,
+                                  color: bottomSheetColor,
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle_outline,
-                                        color: Colors.black,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'RC successfully uploaded',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.file(
+                                    image,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
                         SizedBox(
                           height: 30,
                         ),
@@ -314,12 +269,7 @@ class _Step1State extends State<Step1> {
                                   Size(double.infinity, 50)), // Set max size
                             ),
                             onPressed: () async {
-                              await CarRepository().getAllCars();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Step2(),
-                                  ));
+                              //TODO add a navigator here
                             },
                             child: Text(
                               'NEXT',
@@ -333,41 +283,5 @@ class _Step1State extends State<Step1> {
         ),
       ),
     );
-  }
-}
-
-class CarRepository {
-  final DatabaseHelper dbHelper = DatabaseHelper.instance;
-
-  Future<void> getAllCars() async {
-    try {
-      List<CarIListModel> apiCarList =
-          await CarListHost().carListHost(); // Fetch API data
-
-      // Fetch stored cars from DB
-      List<CarIListModel> storedCars = await dbHelper.getCars();
-
-      for (var car in apiCarList) {
-        bool exists = storedCars.any((dbCar) => dbCar.id == car.id);
-
-        if (!exists) {
-          await dbHelper.insertCar(car); // Insert new car
-        } else {
-          CarIListModel existingCar =
-              storedCars.firstWhere((dbCar) => dbCar.id == car.id);
-
-          // Check if updatedAt is different, meaning data has changed
-          if (existingCar.updatedAt != car.updatedAt) {
-            await dbHelper.updateCar(car); // Update the existing car
-          }
-        }
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-  }
-
-  Future<List<CarIListModel>> getCarsFromDB() async {
-    return await dbHelper.getCars();
   }
 }

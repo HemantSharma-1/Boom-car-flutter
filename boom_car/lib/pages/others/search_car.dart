@@ -1,5 +1,5 @@
 import 'package:boom_car/pages/others/car_info.dart';
-import 'package:boom_car/services/car_api/car_list.dart';
+import 'package:boom_car/services/api/car_api/car_list.dart';
 import 'package:boom_car/services/models/car_listing.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';

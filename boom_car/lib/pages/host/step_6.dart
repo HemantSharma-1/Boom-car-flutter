@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:boom_car/pages/host/under_verification_screen.dart';
-import 'package:boom_car/services/car_api/add_car.dart';
+import 'package:boom_car/services/api/car_api/add_car.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

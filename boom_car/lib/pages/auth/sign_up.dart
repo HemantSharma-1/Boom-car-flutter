@@ -1,6 +1,6 @@
 import 'package:boom_car/pages/auth/login.dart';
 import 'package:boom_car/pages/auth/phone_number.dart';
-import 'package:boom_car/services/auth/googe_sign_up.dart';
+import 'package:boom_car/services/api/auth/googe_sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/validator.dart';
 import 'package:flutter/material.dart';

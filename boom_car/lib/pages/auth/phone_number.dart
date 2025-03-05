@@ -1,6 +1,6 @@
 import 'package:boom_car/pages/auth/verify_otp.dart';
-import 'package:boom_car/services/auth/googe_sign_up.dart';
-import 'package:boom_car/services/auth/sign_up.dart';
+import 'package:boom_car/services/api/auth/googe_sign_up.dart';
+import 'package:boom_car/services/api/auth/sign_up.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:boom_car/utils/common_loader.dart';
 import 'package:boom_car/utils/validator.dart';
