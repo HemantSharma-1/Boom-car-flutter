@@ -1,4 +1,5 @@
 import 'package:boom_car/pages/my_rides/car_image.dart';
+import 'package:boom_car/pages/my_rides/return_car.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class MyRidesCarDetails extends StatefulWidget {
 
 class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
   bool selected = false;
+  bool switchState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +240,86 @@ class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
                     ],
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Extend Ride",
+                        style:
+                            Theme.of(context).textTheme.displaySmall!.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                      Switch(
+                        value: switchState,
+                        activeColor: secondayColor,
+                        onChanged: (val) {
+                          setState(() {
+                            !switchState
+                                ? switchState = true
+                                : switchState = false;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  Text(
+                    "By enabling this you are requesting to extend the ride according to the days you will enter",
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: Colors.white,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(20),
+                      fillColor: bottomSheetColor,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: "Select Date",
+                      prefixIcon: Image.asset('assets/icons/ic_calendar.png'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        textStyle: WidgetStateProperty.all(
+                          TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        foregroundColor: WidgetStateProperty.all(secondayColor),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReturnCar(),
+                          ),
+                        );
+                      },
+                      child: Text("Extend Ride"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
                   ),
                 ],
               ),
@@ -247,6 +328,7 @@ class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
         ),
       ),
       bottomSheet: BottomSheet(
+        backgroundColor: Colors.black,
         enableDrag: false,
         onClosing: () {},
         builder: (context) => Padding(

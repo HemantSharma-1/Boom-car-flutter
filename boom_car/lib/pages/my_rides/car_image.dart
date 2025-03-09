@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:boom_car/pages/my_rides/my_rides_otp.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,17 @@ class _CarImageScreenState extends State<CarImageScreen> {
       if (pickedFile != null) {
         setState(() {
           _image.add(File(pickedFile.path));
+          isImageUploaded = true;
         });
 
         // Ask user if they want to take another photo
-        continueCapturing = await _showCaptureMoreDialog();
+        if (_image.length < 4) {
+          continueCapturing = await _showCaptureMoreDialog();
+        } else {
+          continueCapturing = false;
+        }
       } else {
-        continueCapturing = false; // Stop capturing if user cancels
+        continueCapturing = false;
       }
     }
   }
@@ -230,46 +236,71 @@ class _CarImageScreenState extends State<CarImageScreen> {
                     )
                   : Column(
                       children: [
-                        if (_image.isNotEmpty)
-                          for (var image in _image)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Container(
-                                height: 120,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                  color: bottomSheetColor,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Image.file(
-                                    image,
-                                    fit: BoxFit.cover,
+                        SizedBox(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 1,
+                              mainAxisSpacing: 1,
+                              childAspectRatio: 1.5,
+                            ),
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _image.length,
+                            itemBuilder: (context, index) => Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Container(
+                                  height: 120,
+                                  width: 180,
+                                  decoration: BoxDecoration(
+                                    color: bottomSheetColor,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.file(
+                                      _image[index],
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                          ),
+                        ),
                         SizedBox(
                           height: 30,
                         ),
                         Center(
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              textStyle: WidgetStateProperty.all(
-                                TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                              shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
                                 ),
                               ),
                               minimumSize: WidgetStateProperty.all(
                                   Size(double.infinity, 50)), // Set min size
                               maximumSize: WidgetStateProperty.all(
                                   Size(double.infinity, 50)), // Set max size
+                              textStyle: WidgetStateProperty.all(
+                                TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              //TODO add a navigator here
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyRidesVerifyOtp(),
+                                ),
+                              );
                             },
                             child: Text(
                               'NEXT',
