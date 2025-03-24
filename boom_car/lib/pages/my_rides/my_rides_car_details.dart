@@ -2,6 +2,7 @@ import 'package:boom_car/pages/my_rides/car_image.dart';
 import 'package:boom_car/pages/my_rides/return_car.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MyRidesCarDetails extends StatefulWidget {
   const MyRidesCarDetails({super.key});
@@ -13,6 +14,7 @@ class MyRidesCarDetails extends StatefulWidget {
 class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
   bool selected = false;
   bool switchState = false;
+  double carRating = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -242,6 +244,48 @@ class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
                   SizedBox(
                     height: 10,
                   ),
+                  Text(
+                    'You rated this car:',
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RatingBar.builder(
+                    initialRating: 3,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 17),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      setState(() {});
+                      print(rating);
+                      carRating = rating;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: Text(
+                      '$carRating stars',
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -319,6 +363,96 @@ class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
                     ),
                   ),
                   SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Text(
+                      "Frequently Asked Questions (FAQ's)",
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                            color: secondayColor,
+                            fontSize: 17,
+                          ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  !selected
+                      ? Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              color: bottomSheetColor,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Row(
+                            children: [
+                              Text("Is this booking non-refundable",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall!
+                                      .copyWith(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selected = true;
+                                  });
+                                },
+                                child: Icon(Icons.keyboard_arrow_down_rounded),
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              color: bottomSheetColor,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text("Is this booking non-refundable",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displaySmall!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selected = false;
+                                      });
+                                    },
+                                    child:
+                                        Icon(Icons.keyboard_arrow_up_rounded),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Loren ipsem is simpl dummy text of the printin and typesetting industry',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall!
+                                    .copyWith(
+                                      fontSize: 12,
+                                    ),
+                              )
+                            ],
+                          ),
+                        ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
                     height: 200,
                   ),
                 ],
@@ -336,92 +470,6 @@ class _MyRidesCarDetailsState extends State<MyRidesCarDetails> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Center(
-                child: Text(
-                  "Frequently Asked Questions (FAQ's)",
-                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                        color: secondayColor,
-                        fontSize: 17,
-                      ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              !selected
-                  ? Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          color: bottomSheetColor,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Row(
-                        children: [
-                          Text("Is this booking non-refundable",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall!
-                                  .copyWith(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selected = true;
-                              });
-                            },
-                            child: Icon(Icons.keyboard_arrow_down_rounded),
-                          )
-                        ],
-                      ),
-                    )
-                  : Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          color: bottomSheetColor,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text("Is this booking non-refundable",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displaySmall!
-                                      .copyWith(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selected = false;
-                                  });
-                                },
-                                child: Icon(Icons.keyboard_arrow_up_rounded),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Loren ipsem is simpl dummy text of the printin and typesetting industry',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall!
-                                .copyWith(
-                                  fontSize: 12,
-                                ),
-                          )
-                        ],
-                      ),
-                    ),
-              SizedBox(
-                height: 10,
-              ),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

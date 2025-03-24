@@ -1,5 +1,6 @@
 import 'package:boom_car/pages/others/reviews.dart';
 import 'package:boom_car/services/api/car_api/car_info.dart';
+import 'package:boom_car/services/api/car_api/car_payment.dart';
 import 'package:boom_car/services/api/car_api/car_review.dart';
 import 'package:boom_car/services/models/car_information.dart';
 import 'package:boom_car/services/models/car_review.dart';
@@ -7,6 +8,7 @@ import 'package:boom_car/utils/colors.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 class CarInformation extends StatefulWidget {
   const CarInformation(
@@ -72,6 +74,10 @@ class _CarInformationState extends State<CarInformation> {
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat("dd MMM, ha");
+    final start = dateFormat.parse(widget.startDate);
+    final end = dateFormat.parse(widget.endDate);
+    final now = DateTime.now();
     return SafeArea(
       bottom: false,
       child: Scaffold(
@@ -383,61 +389,298 @@ class _CarInformationState extends State<CarInformation> {
                 }),
           ),
         ),
-        bottomSheet: BottomSheet(
-          enableDrag: false,
-          onClosing: () {},
-          builder: (context) => Container(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            constraints: BoxConstraints(maxHeight: 80),
-            decoration: BoxDecoration(
-              color: bottomSheetColor,
-              borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(24), bottom: Radius.zero),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+        bottomSheet: FutureBuilder(
+            future: carInfo,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return BottomSheet(
+                  enableDrag: false,
+                  onClosing: () {},
+                  builder: (context) => Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    constraints: BoxConstraints(maxHeight: 80),
+                    decoration: BoxDecoration(
+                      color: bottomSheetColor,
+                      borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(24), bottom: Radius.zero),
+                    ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              (carInformation!.car!.pricing!.lessThan24H!
+                                          .minHourlyPrice! *
+                                      DateTime(now.year, end.month, end.day,
+                                              end.hour)
+                                          .difference(
+                                            DateTime(now.year, start.month,
+                                                start.day, start.hour),
+                                          )
+                                          .inHours)
+                                  .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displaySmall!
+                                  .copyWith(
+                                      color: secondayColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              '(including all taxes)',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displaySmall!
+                                  .copyWith(fontSize: 12),
+                            )
+                          ],
+                        ),
+                        Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            //show bottom sheet
+                            showBottomSheet(
+                                context: context,
+                                fee: (carInformation!.car!.pricing!.lessThan24H!
+                                        .minHourlyPrice! *
+                                    DateTime(now.year, end.month, end.day,
+                                            end.hour)
+                                        .difference(
+                                          DateTime(now.year, start.month,
+                                              start.day, start.hour),
+                                        )
+                                        .inHours));
+                          },
+                          style: ButtonStyle(
+                            minimumSize: WidgetStateProperty.all(
+                                Size(170, 39)), // Set min size
+                            maximumSize: WidgetStateProperty.all(
+                                Size(170, 39)), // Set max size
+                          ),
+                          child: Text(
+                            'Pay Now',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Something went wrong'),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
+      ),
+    );
+  }
+
+  Future<void> showBottomSheet(
+      {required BuildContext context, required int fee}) {
+    return showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: bottomSheetColor,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SizedBox(
+            height: 475,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Price Breakup',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: 24, color: secondayColor),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '₹7,787',
-                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                          color: secondayColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                      'Trip Amount(this does not include fuel)',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: 14,
+                          ),
                     ),
-                    SizedBox(
-                      height: 2,
-                    ),
+                    Text('₹$fee')
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
                     Text(
-                      '(including all taxes)',
+                      'Trip Protection Fee',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: 14,
+                          ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Convenience Fee',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 14,
+                      ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Price',
                       style: Theme.of(context)
                           .textTheme
-                          .displaySmall!
-                          .copyWith(fontSize: 12),
+                          .titleLarge!
+                          .copyWith(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '₹$fee',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
-                Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    minimumSize:
-                        WidgetStateProperty.all(Size(170, 39)), // Set min size
-                    maximumSize:
-                        WidgetStateProperty.all(Size(170, 39)), // Set max size
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Refundable Deposit',
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontSize: 14,
+                                  ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Has been waived off for this booking',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 14, color: Colors.white38),
+                        ),
+                      ],
+                    ),
+                    Text('₹0')
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  color: shadowColor,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Final Amount',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: 14,
+                          ),
+                    ),
+                    Text(
+                      '₹$fee',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    child: const Text('Proceed to Pay'),
+                    onPressed: () async {
+                      final storage = FlutterSecureStorage();
+                      final token = await storage.read(key: 'authToken');
+                      await CarPayment().carPayment(
+                          carID: carInformation!.id!,
+                          startDate: widget.startDate,
+                          endDate: widget.endDate,
+                          tripAmount: fee.toString(),
+                          tripProtectionFee: "0",
+                          convenienceFee: "0",
+                          token: token!);
+                    },
                   ),
-                  child: Text(
-                    'Pay Now',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )
+                ),
               ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

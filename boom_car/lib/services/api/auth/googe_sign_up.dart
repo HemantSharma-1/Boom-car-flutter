@@ -11,7 +11,6 @@ class UserGoogleSignUp {
       required String profileImage}) async {
     try {
       final uri = Uri.parse('$baseUrl/auth/google/login');
-      print('$email $profileImage $name $phno');
       final response = await http.post(
         uri,
         body: jsonEncode({

@@ -240,36 +240,90 @@ class _CarImageScreenState extends State<CarImageScreen> {
                           child: GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 1,
-                              mainAxisSpacing: 1,
+                              crossAxisCount: 2, // 2 images per row
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
                               childAspectRatio: 1.5,
                             ),
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: _image.length,
-                            itemBuilder: (context, index) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Container(
-                                  height: 120,
-                                  width: 180,
-                                  decoration: BoxDecoration(
-                                    color: bottomSheetColor,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.file(
-                                      _image[index],
-                                      fit: BoxFit.cover,
+                            itemCount: _image.length < 4
+                                ? _image.length + 1
+                                : _image.length,
+                            itemBuilder: (context, index) {
+                              if (index == _image.length && _image.length < 4) {
+                                // Add Photo button
+                                return GestureDetector(
+                                  onTap: () {
+                                    pickImage();
+                                  },
+                                  child: DottedBorder(
+                                    borderType: BorderType.RRect,
+                                    strokeWidth: 1,
+                                    dashPattern: [6],
+                                    radius: Radius.circular(16),
+                                    color: Colors.white,
+                                    child: Container(
+                                      height: 125,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: bottomSheetColor,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                              'assets/icons/ic_uploader.png'),
+                                          Text(
+                                            'Upload Media',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .displayLarge!
+                                                .copyWith(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: secondayColor),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'choose files from Gallery',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .displayLarge!
+                                                .copyWith(
+                                                  fontSize: 14,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
+                                );
+                              } else {
+                                // Display images
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                    height: 120,
+                                    width: 180,
+                                    decoration: BoxDecoration(
+                                      color: bottomSheetColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.file(
+                                        _image[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                           ),
                         ),
                         SizedBox(
