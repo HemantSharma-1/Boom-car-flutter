@@ -327,12 +327,13 @@ class _ReturnCarState extends State<ReturnCar> {
                                 ),
                               ),
                               onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyRidesVerifyOtp(),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => MyRidesVerifyOtp( bookingId: ,
+                                //     carImages: ,),
+                                //   ),
+                                // );
                               },
                               child: Text(
                                 'NEXT',
@@ -460,11 +461,12 @@ class _ReturnCarState extends State<ReturnCar> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyRidesVerifyOtp(),
-                        ));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => MyRidesVerifyOtp( bookingId: ,
+                    //                 carImages: ,),
+                    //     ));
                   },
                   child: Text(
                     'Next',

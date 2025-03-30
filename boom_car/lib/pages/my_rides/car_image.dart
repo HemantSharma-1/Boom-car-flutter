@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CarImageScreen extends StatefulWidget {
-  const CarImageScreen({super.key});
-
+  const CarImageScreen({super.key, required this.bookingId });
+  final String bookingId;
   @override
   State<CarImageScreen> createState() => _CarImageScreenState();
 }
@@ -352,7 +352,10 @@ class _CarImageScreenState extends State<CarImageScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MyRidesVerifyOtp(),
+                                  builder: (context) => MyRidesVerifyOtp(
+                                    bookingId: widget.bookingId,
+                                    carImages: _image,
+                                  ),
                                 ),
                               );
                             },

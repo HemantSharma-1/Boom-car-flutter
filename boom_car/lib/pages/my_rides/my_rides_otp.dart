@@ -1,16 +1,38 @@
+import 'dart:io';
 import 'package:boom_car/pages/home_page.dart';
+import 'package:boom_car/services/api/guest/guest_start_booking.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pinput/pinput.dart';
 
 class MyRidesVerifyOtp extends StatefulWidget {
-  const MyRidesVerifyOtp({super.key});
-
+  const MyRidesVerifyOtp({
+    super.key,
+    required this.bookingId,
+    required this.carImages,
+  });
+  final String bookingId;
+  final List<File> carImages;
   @override
   State<MyRidesVerifyOtp> createState() => _MyRidesVerifyOtpState();
 }
 
 class _MyRidesVerifyOtpState extends State<MyRidesVerifyOtp> {
+  Future rentCar() async {
+    final storage = FlutterSecureStorage();
+    // Check if token exists
+    final token = await storage.read(key: 'authToken');
+    final data = await StartBooking().startBooking(
+        bookingId: widget.bookingId,
+        otp: otpCtrl.text,
+        carImages: widget.carImages,
+        authToken: token!);
+
+    print(data);
+  }
+
+  final TextEditingController otpCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +88,7 @@ class _MyRidesVerifyOtpState extends State<MyRidesVerifyOtp> {
                   ),
                   Center(
                     child: Pinput(
+                      controller: otpCtrl,
                       length: 5,
                       defaultPinTheme: PinTheme(
                         height: 70,
@@ -105,7 +128,9 @@ class _MyRidesVerifyOtpState extends State<MyRidesVerifyOtp> {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        rentCar();
+                      },
                       child: Text("RENT A CAR"),
                     ),
                   ),

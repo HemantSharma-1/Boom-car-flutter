@@ -1,6 +1,9 @@
 import 'package:boom_car/pages/my_rides/my_rides_car_details.dart';
+import 'package:boom_car/services/api/guest/guest_booking.dart';
+import 'package:boom_car/services/models/my_rides.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyRide extends StatefulWidget {
   const MyRide({super.key});
@@ -37,8 +40,8 @@ class _MyRideState extends State<MyRide> with SingleTickerProviderStateMixin {
           children: [
             TabBar.secondary(
               controller: _tabController,
-              labelColor: secondayColor,
-              indicatorColor: secondayColor,
+              labelColor: myRidesColor,
+              indicatorColor: myRidesColor,
               dividerColor: Colors.transparent,
               unselectedLabelColor: Colors.white,
               labelStyle: Theme.of(context)
@@ -82,153 +85,171 @@ class RidesWidget extends StatefulWidget {
 class _RidesWidgetState extends State<RidesWidget> {
   final List<String> last = ["7 Days", "30 Days", "6 month"];
   int selectedIndex = 0;
+  GetMyRides? myRides;
+  Future<String> getTrips() async {
+    final storage = FlutterSecureStorage();
+    // Check if token exists
+    final token = await storage.read(key: 'authToken');
+    myRides = await GuestBooking().guestBooking(token: token!);
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 5), // Adjust padding if needed
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Colors.white, width: 1), // Custom bottom border
+    return FutureBuilder<Object>(
+        future: getTrips(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              child: Row(
-                children: [
-                  Image.asset('assets/icons/ic_calendar.png'),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Enter Starting Date',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              "To",
-              style: TextStyle(color: Colors.white),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 5), // Adjust padding if needed
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Colors.white, width: 1), // Custom bottom border
-                ),
-              ),
-              child: Row(
-                children: [
-                  Image.asset('assets/icons/ic_endCalendar.png'),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Enter Ending Date',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 25,
-          child: ListView.builder(
-            itemCount: last.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment
-                      .center, // Change to center for better positioning
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+                      padding: EdgeInsets.only(bottom: 5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: bottomSheetColor,
-                        border: Border.all(
-                          color: selectedIndex == index
-                              ? secondayColor
-                              : Colors.grey,
+                        border: Border(
+                          bottom: BorderSide(color: Colors.white, width: 1),
                         ),
                       ),
-                      child: Text('Last ${last[index]}'),
-                    ),
-                    if (selectedIndex == index)
-                      Positioned(
-                        right: -10, // Adjust position to move it fully outside
-                        top: -10,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior
-                              .opaque, // Ensures tap is detected even outside image
-                          onTap: () {
-                            print("tapped");
-                            setState(() {
-                              selectedIndex = 4;
-                            });
-                          },
-                          child: Container(
-                            width: 30, // Expand the tap area
-                            height: 30,
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/icons/ic_cancel.png',
-                              width: 24,
-                              height: 24,
-                            ),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/icons/ic_calendar.png'),
+                          SizedBox(
+                            width: 10,
                           ),
+                          Text(
+                            'Enter Starting Date',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "To",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.white, width: 1),
                         ),
                       ),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/icons/ic_endCalendar.png'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Enter Ending Date',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
-                )),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        RideCard(),
-      ],
-    );
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: 25,
+                  child: ListView.builder(
+                    itemCount: last.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: bottomSheetColor,
+                              border: Border.all(
+                                color: selectedIndex == index
+                                    ? myRidesColor
+                                    : Colors.grey,
+                              ),
+                            ),
+                            child: Text('Last ${last[index]}'),
+                          ),
+                          if (selectedIndex == index)
+                            Positioned(
+                              right: -10,
+                              top: -10,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  setState(() {
+                                    selectedIndex = 4;
+                                  });
+                                },
+                                child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/icons/ic_cancel.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RideCard(
+                  data: myRides!,
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('something went wrong'),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
 
 class RideCard extends StatelessWidget {
-  const RideCard({
-    super.key,
-  });
-
+  const RideCard({super.key, required this.data});
+  final GetMyRides data;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        itemCount: 2,
+        itemCount: data.bookings!.length,
         itemBuilder: (context, index) => Card(
           color: Colors.black,
           margin: EdgeInsets.only(bottom: 15),
@@ -263,7 +284,7 @@ class RideCard extends StatelessWidget {
                     ),
                     SizedBox(height: 2),
                     Divider(
-                      color: secondayColor,
+                      color: myRidesColor,
                     ),
                     SizedBox(height: 2),
                     Row(
@@ -293,7 +314,7 @@ class RideCard extends StatelessWidget {
                     ),
                     SizedBox(height: 2),
                     Divider(
-                      color: secondayColor,
+                      color: myRidesColor,
                     ),
                     SizedBox(height: 2),
                     Row(
@@ -314,7 +335,7 @@ class RideCard extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      '₹2,300',
+                      '₹${data.bookings![index].tripAmount}',
                       style: Theme.of(context).textTheme.displaySmall!.copyWith(
                           color: Colors.white,
                           fontSize: 15,
@@ -325,18 +346,21 @@ class RideCard extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          textStyle: WidgetStateProperty.all(
-                            TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                            textStyle: WidgetStateProperty.all(
+                              TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                        ),
+                            backgroundColor:
+                                WidgetStateProperty.all(myRidesColor)),
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MyRidesCarDetails(),
+                                builder: (context) => MyRidesCarDetails(
+                                  bookingId: data.bookings![index].id!,
+                                ),
                               ));
                         },
                         child: Text(
