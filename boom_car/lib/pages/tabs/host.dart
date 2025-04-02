@@ -165,7 +165,7 @@ class _HostState extends State<Host> {
               ),
               RichText(
                 text: TextSpan(
-                  text: 'Potential monethy earning ',
+                  text: 'Potential monthly earning ',
                   style: Theme.of(context)
                       .textTheme
                       .displaySmall!

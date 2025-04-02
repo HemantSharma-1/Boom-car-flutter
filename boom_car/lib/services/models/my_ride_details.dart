@@ -31,7 +31,7 @@ class GetMyRidesDetails {
 class Booking {
     String? id;
     String? bookingId;
-    BookedBy? bookedBy;
+    HostedBy? hostedBy;
     CarListing? carListing;
     DateTime? startDate;
     DateTime? endDate;
@@ -51,7 +51,7 @@ class Booking {
     Booking({
         this.id,
         this.bookingId,
-        this.bookedBy,
+        this.hostedBy,
         this.carListing,
         this.startDate,
         this.endDate,
@@ -72,7 +72,7 @@ class Booking {
     factory Booking.fromMap(Map<String, dynamic> json) => Booking(
         id: json["id"],
         bookingId: json["bookingId"],
-        bookedBy: json["bookedBy"] == null ? null : BookedBy.fromMap(json["bookedBy"]),
+        hostedBy: json["hostedBy"] == null ? null : HostedBy.fromMap(json["hostedBy"]),
         carListing: json["carListing"] == null ? null : CarListing.fromMap(json["carListing"]),
         startDate: json["startDate"] == null ? null : DateTime.parse(json["startDate"]),
         endDate: json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
@@ -93,7 +93,7 @@ class Booking {
     Map<String, dynamic> toMap() => {
         "id": id,
         "bookingId": bookingId,
-        "bookedBy": bookedBy?.toMap(),
+        "hostedBy": hostedBy?.toMap(),
         "carListing": carListing?.toMap(),
         "startDate": startDate?.toIso8601String(),
         "endDate": endDate?.toIso8601String(),
@@ -112,18 +112,46 @@ class Booking {
     };
 }
 
-class BookedBy {
+class CarListing {
+    String? carName;
+    String? carLocation;
+    String? coverImage;
+    String? registrationNumber;
+
+    CarListing({
+        this.carName,
+        this.carLocation,
+        this.coverImage,
+        this.registrationNumber,
+    });
+
+    factory CarListing.fromMap(Map<String, dynamic> json) => CarListing(
+        carName: json["carName"],
+        carLocation: json["carLocation"],
+        coverImage: json["coverImage"],
+        registrationNumber: json["registrationNumber"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "carName": carName,
+        "carLocation": carLocation,
+        "coverImage": coverImage,
+        "registrationNumber": registrationNumber,
+    };
+}
+
+class HostedBy {
     String? name;
     String? phone;
     String? profileImage;
 
-    BookedBy({
+    HostedBy({
         this.name,
         this.phone,
         this.profileImage,
     });
 
-    factory BookedBy.fromMap(Map<String, dynamic> json) => BookedBy(
+    factory HostedBy.fromMap(Map<String, dynamic> json) => HostedBy(
         name: json["name"],
         phone: json["phone"],
         profileImage: json["profileImage"],
@@ -133,29 +161,5 @@ class BookedBy {
         "name": name,
         "phone": phone,
         "profileImage": profileImage,
-    };
-}
-
-class CarListing {
-    String? carLocation;
-    String? coverImage;
-    String? registrationNumber;
-
-    CarListing({
-        this.carLocation,
-        this.coverImage,
-        this.registrationNumber,
-    });
-
-    factory CarListing.fromMap(Map<String, dynamic> json) => CarListing(
-        carLocation: json["carLocation"],
-        coverImage: json["coverImage"],
-        registrationNumber: json["registrationNumber"],
-    );
-
-    Map<String, dynamic> toMap() => {
-        "carLocation": carLocation,
-        "coverImage": coverImage,
-        "registrationNumber": registrationNumber,
     };
 }

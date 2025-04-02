@@ -59,7 +59,9 @@ class _EditPRofileState extends State<EditPRofile> {
       );
       Navigator.pop(context);
       if (response['success']) {
-        Navigator.pop(context);
+        final storage = FlutterSecureStorage();
+        await storage.write(key: 'name', value: nameCtrl.text);
+        Navigator.pop(context, true);
       } else {
         setState(() {
           _errorMessage = response["message"] ?? "Login failed. Try again.";

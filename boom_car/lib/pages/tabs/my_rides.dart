@@ -4,6 +4,7 @@ import 'package:boom_car/services/models/my_rides.dart';
 import 'package:boom_car/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 class MyRide extends StatefulWidget {
   const MyRide({super.key});
@@ -84,7 +85,7 @@ class RidesWidget extends StatefulWidget {
 
 class _RidesWidgetState extends State<RidesWidget> {
   final List<String> last = ["7 Days", "30 Days", "6 month"];
-  int selectedIndex = 0;
+  int selectedIndex = 3;
   GetMyRides? myRides;
   Future<String> getTrips() async {
     final storage = FlutterSecureStorage();
@@ -235,7 +236,9 @@ class _RidesWidgetState extends State<RidesWidget> {
             );
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: secondayColor,
+              ),
             );
           }
         });
@@ -262,8 +265,8 @@ class RideCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'assets/images/img_thar.png',
+                  child: Image.network(
+                    data.bookings![index].carListing!.coverImage!,
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -276,7 +279,7 @@ class RideCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Mahindra Thar',
+                      data.bookings![index].carListing!.carName!,
                       style: Theme.of(context).textTheme.displaySmall!.copyWith(
                           color: Colors.white,
                           fontSize: 15,
@@ -292,7 +295,7 @@ class RideCard extends StatelessWidget {
                         Image.asset('assets/icons/ic_clock.png'),
                         SizedBox(width: 5),
                         Text(
-                          'Feb 12 (7PM) - Feb 28 (8PM)',
+                          '${DateFormat('MMM dd (ha)').format(data.bookings![index].startDate!)} - ${DateFormat('MMM dd (ha)').format(data.bookings![index].endDate!)}',
                           style: Theme.of(context)
                               .textTheme
                               .displaySmall!
@@ -301,7 +304,7 @@ class RideCard extends StatelessWidget {
                         Spacer(),
                         Image.asset('assets/icons/ic_progress.png'),
                         Text(
-                          'Upcoming',
+                          data.bookings![index].bookingStatus!,
                           style: Theme.of(context)
                               .textTheme
                               .displaySmall!
@@ -321,15 +324,17 @@ class RideCard extends StatelessWidget {
                       children: [
                         Image.asset('assets/icons/ic_map_pin.png'),
                         SizedBox(width: 5),
-                        Text(
-                          'Pickup Location: Block 10, Nabha',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall!
-                              .copyWith(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
+                        Flexible(
+                          child: Text(
+                            'Pickup Location: ${data.bookings![index].carListing!.carLocation!}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                          ),
                         ),
                       ],
                     ),

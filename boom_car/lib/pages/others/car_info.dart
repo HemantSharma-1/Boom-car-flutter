@@ -288,7 +288,9 @@ class _CarInformationState extends State<CarInformation> {
                               return Text('Something went wrong');
                             } else {
                               return Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(
+                                  color: secondayColor,
+                                ),
                               );
                             }
                           },
@@ -383,7 +385,9 @@ class _CarInformationState extends State<CarInformation> {
                     );
                   } else {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: secondayColor,
+                      ),
                     );
                   }
                 }),
@@ -478,7 +482,9 @@ class _CarInformationState extends State<CarInformation> {
                 );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: secondayColor,
+                  ),
                 );
               }
             }),
@@ -665,14 +671,22 @@ class _CarInformationState extends State<CarInformation> {
                     onPressed: () async {
                       final storage = FlutterSecureStorage();
                       final token = await storage.read(key: 'authToken');
-                      await CarPayment().carPayment(
+                      final data = await CarPayment().carPayment(
                           carID: carInformation!.id!,
-                          startDate: widget.startDate,
-                          endDate: widget.endDate,
+                          startDate: DateFormat('dd MMM, ha')
+                              .parse(widget.startDate)
+                              .toString(),
+                          endDate: DateFormat('dd MMM, ha')
+                              .parse(widget.endDate)
+                              .toString(),
                           tripAmount: fee.toString(),
                           tripProtectionFee: "0",
                           convenienceFee: "0",
                           token: token!);
+
+                      if (data['success']) {
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ),

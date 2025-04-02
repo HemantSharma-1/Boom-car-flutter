@@ -215,8 +215,8 @@ class _BookRideState extends State<BookRide> {
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2001),
+                      initialDate: startDate,
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
                     );
 
@@ -267,8 +267,9 @@ class _BookRideState extends State<BookRide> {
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2001),
+                      initialDate:
+                          startDate.isBefore(endDate) ? endDate : startDate,
+                      firstDate: startDate,
                       lastDate: DateTime(2100),
                     );
 

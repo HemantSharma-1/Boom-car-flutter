@@ -69,7 +69,9 @@ class _ProfileState extends State<Profile> {
                   MaterialPageRoute(
                     builder: (context) => EditPRofile(),
                   ),
-                ),
+                ).then((value) async {
+                  await getName();
+                }),
               ),
               SizedBox(
                 height: 10,
